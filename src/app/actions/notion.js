@@ -2,8 +2,6 @@
 import { Client } from "@notionhq/client";
 import notionDatabaseProcessor from "./notionDatabaseProcessor";
 
-console.log({ key: process.env });
-
 // Initialize Notion client
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
@@ -16,17 +14,16 @@ const getNotionData = async (database_id, sectionName) => {
     database_id,
   });
 
-  // Use computed property name for dynamic keys
   Object.assign(result, {
     [sectionName]: response.results.map((item) =>
       notionDatabaseProcessor(item),
     ),
   });
 
-  return result; // Return the updated result
+  return result;
 };
 
-const notionLoad = async (_event, _context) => {
+const notionLoad = async () => {
   try {
     await getNotionData(process.env.NOTION_DATABASE_ID, "landingPage");
     await getNotionData(process.env.NOTION_PROJECTS_DATABASE_ID, "projects");

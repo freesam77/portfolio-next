@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Tooltip from "./Tooltip.tsx";
+import Tooltip from "./Tooltip";
 
 const url = "https://fonts.googleapis.com/icon?family=Material+Icons";
 
@@ -27,12 +27,20 @@ const ToggleButton = (
   const onClickHandler = (buttonCase: ButtonActiveState) => {
     switch (buttonCase) {
       case "left":
-        buttonActive !== "left" && setButtonActive("left");
-        leftButtonCallback && leftButtonCallback();
+        if (buttonActive !== "left") {
+          setButtonActive("left");
+        }
+        if (leftButtonCallback) {
+          leftButtonCallback();
+        }
         break;
       default:
-        buttonActive !== "right" && setButtonActive("right");
-        rightButtonCallback && rightButtonCallback();
+        if (buttonActive !== "right") {
+          setButtonActive("right");
+        }
+        if (rightButtonCallback) {
+          rightButtonCallback();
+        }
         break;
     }
   };

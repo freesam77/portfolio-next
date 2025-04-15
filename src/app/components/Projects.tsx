@@ -1,6 +1,6 @@
 "use client";
 import { LinkRounded } from "@mui/icons-material";
-import { useNotion } from "../notionContext.tsx";
+import { useNotion } from "../notionContext";
 import Modal from "./Modal";
 import { useState } from "react";
 
@@ -60,8 +60,10 @@ const ProjectSection = (props: ProjectSectionProps) => {
           projectData.mediaUrl || "https://placehold.co/600x400?text=No+Preview"
         }
         onClick={() => {
-          projectData.mediaUrl && setModalOpen(true);
-        }}
+            if (projectData.mediaUrl) {
+              setModalOpen(true);
+            }
+          }}
       />
       <Modal
         isOpen={modalOpen}
@@ -89,7 +91,7 @@ const ProjectSection = (props: ProjectSectionProps) => {
 };
 
 const Projects = () => {
-  const { projects } = useNotion().data;
+  const projects = useNotion().data?.projects || [];
 
   const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
 

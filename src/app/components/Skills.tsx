@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useNotion } from "../notionContext.tsx";
+import { useNotion } from "../notionContext";
 
 interface Skill {
   mastery: number;
@@ -13,15 +13,15 @@ const SkillGrid: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
   const [exitingSkills, setExitingSkills] = useState<string[]>([]); // Track exiting skills
-  const skillsData: Skill[] = useNotion().data.skillset;
+  const skillset = useNotion().data?.skillset;
 
   useEffect(() => {
-    if (!skillsData) return;
+    if (!skillset) return;
 
     const newFilteredSkills =
       selectedCategory === "All"
-        ? skillsData
-        : skillsData.filter(({ categories }) =>
+        ? skillset
+        : skillset.filter(({ categories }) =>
             categories.includes(selectedCategory),
           );
 
@@ -39,13 +39,13 @@ const SkillGrid: React.FC = () => {
     }, 400);
   }, [selectedCategory]);
 
-  if (!skillsData) {
+  if (!skillset) {
     return <div>No data for skill grid...</div>;
   }
 
   const categories: string[] = [
     "All",
-    ...new Set(skillsData.flatMap(({ categories }) => categories)),
+    ...new Set(skillset.flatMap(({ categories }) => categories)),
   ];
 
   return (

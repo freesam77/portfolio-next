@@ -143,6 +143,7 @@ const NavigationBar = () => {
             return (
               <a
                 href={href}
+                key={section.toLowerCase()}
                 onClick={
                   isResume ? undefined : (e) => handleAnchorClick(e, section)
                 }
@@ -150,7 +151,6 @@ const NavigationBar = () => {
                 rel={isResume ? "noopener noreferrer" : undefined}
               >
                 <div
-                  key={section.toLowerCase()}
                   className={`px-6 py-4 ${isActive && "bg-gradient-to-r from-sky-300/30 to-white/0"}`}
                 >
                   {isResume ? (

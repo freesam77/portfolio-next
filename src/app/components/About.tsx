@@ -2,20 +2,13 @@
 import { useNotion } from "../notionContext";
 
 const About = () => {
-  const landingPageData = {};
-
-  const { landingPage } = useNotion().data;
-
+  const landingPage = useNotion().data?.landingPage;
   if (landingPage) {
-    landingPage.forEach(({ Title, Description }) => {
-      Object.assign(landingPageData, { [`${Title}`]: Description });
-    });
-
     return (
       <>
         <p
           dangerouslySetInnerHTML={{
-            __html: landingPageData["Hero Image"],
+            __html: landingPage[0].Description,
           }}
         />
       </>

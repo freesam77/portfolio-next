@@ -2,8 +2,51 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import notionLoad from "@/app/actions/notion";
 
-// Create Context
-const NotionContext = createContext([]);
+interface LandingPageData {
+  Title: string;
+  Description: string;
+}
+
+interface ProjectData {
+  projectName: string;
+  client: string;
+  description: string;
+  stack: string[];
+  url: string;
+  mediaUrl: string;
+  hidden: boolean;
+  order: number;
+}
+
+interface Skill {
+  mastery: number;
+  categories: string[];
+  skill: string;
+  src: string;
+}
+
+interface ContactData {
+  OnlinePresence: string;
+  Links: string;
+  Icon: string;
+}
+
+type NotionDataType = {
+  landingPage?: LandingPageData[];
+  contact?: ContactData[];
+  projects?: ProjectData[];
+  skillset?: Skill[];
+};
+
+type NotionContextType = {
+  data: NotionDataType | null;
+  loading: boolean;
+};
+
+const NotionContext = createContext<NotionContextType>({
+  data: null,
+  loading: true,
+});
 
 const LoadingAnimation = () => (
   <div className="fixed top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]">
@@ -22,7 +65,7 @@ const storedData =
     : "";
 
 // Notion Provider Component
-export const NotionProvider = ({ children }) => {
+export const NotionProvider = ({ children }: { children: React.ReactNode }) => {
   const [data, setData] = useState(() => {
     return storedData ? JSON.parse(storedData) : null;
   });
