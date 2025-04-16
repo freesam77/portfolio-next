@@ -11,27 +11,27 @@ interface Node {
   flashTimer: number;
 }
 
-const getNumNodes = () => {
-  const width = window.innerWidth;
-  if (width < 768) return 120; // mobile
-  if (width < 1024) return 160; // tablet
-  return 200; // desktop
-};
-
-const getMaxDistance = () => {
-  const width = window.innerWidth;
-  if (width < 768) return 200;
-  if (width < 1024) return 260;
-  return 380;
-};
-
 const AnimatedBG: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodes = useRef<Node[]>([]);
-  const numNodesRef = useRef<number>(getNumNodes());
-  const maxDistanceRef = useRef<number>(getMaxDistance());
+  const numNodesRef = useRef<number>(0);
+  const maxDistanceRef = useRef<number>(0);
 
   useEffect(() => {
+    const getNumNodes = () => {
+      const width = window.innerWidth;
+      if (width < 768) return 120; // mobile
+      if (width < 1024) return 160; // tablet
+      return 200; // desktop
+    };
+
+    const getMaxDistance = () => {
+      const width = window.innerWidth;
+      if (width < 768) return 200;
+      if (width < 1024) return 260;
+      return 380;
+    };
+    
     let scrollY = 0;
 
     const onScroll = () => {
