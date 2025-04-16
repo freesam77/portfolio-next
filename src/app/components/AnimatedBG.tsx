@@ -11,12 +11,25 @@ interface Node {
   flashTimer: number;
 }
 
-const NUM_NODES = 120;
-const MAX_DISTANCE = 300;
+const getNumNodes = () => {
+  const width = window.innerWidth;
+  if (width < 768) return 120; // mobile
+  if (width < 1024) return 160; // tablet
+  return 200; // desktop
+};
+
+const getMaxDistance = () => {
+  const width = window.innerWidth;
+  if (width < 768) return 200;
+  if (width < 1024) return 260;
+  return 380;
+};
 
 const AnimatedBG: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodes = useRef<Node[]>([]);
+  const numNodesRef = useRef<number>(getNumNodes());
+  const maxDistanceRef = useRef<number>(getMaxDistance());
 
   useEffect(() => {
     let scrollY = 0;
@@ -34,24 +47,30 @@ const AnimatedBG: React.FC = () => {
 
     const resize = () => {
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.height = window.innerHeight * 3;
+
+      // Reset nodes
+      nodes.current = [];
+      numNodesRef.current = getNumNodes();
+      maxDistanceRef.current = getMaxDistance();
+
+      for (let i = 0; i < numNodesRef.current; i++) {
+        nodes.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.15,
+          vy: (Math.random() - 0.5) * 0.15,
+          radius: 1 + Math.random() * 2.5,
+          flashTimer: Math.random() * 5000,
+        });
+      }
     };
     resize();
     window.addEventListener("resize", resize);
 
-    // Initialize nodes
-    for (let i = 0; i < NUM_NODES; i++) {
-      nodes.current.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: 1 + Math.random() * 3,
-        flashTimer: Math.random() * 5000,
-      });
-    }
-
-    let currentFlashingNodeIndex = Math.floor(Math.random() * NUM_NODES);
+    let currentFlashingNodeIndex = Math.floor(
+      Math.random() * numNodesRef.current,
+    );
     let flashCooldown = 0;
     nodes.current[currentFlashingNodeIndex].flashTimer = 100;
 
@@ -67,19 +86,16 @@ const AnimatedBG: React.FC = () => {
         for (let j = i + 1; j < nodes.current.length; j++) {
           const a = nodes.current[i];
           const b = nodes.current[j];
-          const dist = Math.hypot(
-            a.x - b.x,
-            a.y - parallaxOffset - (b.y - parallaxOffset),
-          );
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
 
-          if (dist < MAX_DISTANCE) {
+          if (dist < maxDistanceRef.current) {
             const connectedToFlash =
               i === currentFlashingNodeIndex || j === currentFlashingNodeIndex;
 
             ctx.beginPath();
             ctx.strokeStyle = connectedToFlash
-              ? `rgba(56, 189, 248, ${1 - dist / MAX_DISTANCE})`
-              : `rgba(255, 255, 255, ${1 - dist / MAX_DISTANCE})`;
+              ? `rgba(56, 189, 248, ${1 - dist / maxDistanceRef.current})`
+              : `rgba(255, 255, 255, ${0.05 + (1 - dist / maxDistanceRef.current) * 0.2})`;
 
             ctx.moveTo(a.x, a.y - parallaxOffset);
             ctx.lineTo(b.x, b.y - parallaxOffset);
@@ -111,7 +127,7 @@ const AnimatedBG: React.FC = () => {
           if (node.flashTimer <= 0 && flashCooldown <= 0) {
             let nextIndex;
             do {
-              nextIndex = Math.floor(Math.random() * NUM_NODES);
+              nextIndex = Math.floor(Math.random() * numNodesRef.current);
             } while (nextIndex === currentFlashingNodeIndex);
 
             currentFlashingNodeIndex = nextIndex;
@@ -159,7 +175,7 @@ const AnimatedBG: React.FC = () => {
         left: 0,
         zIndex: -1,
         width: "100%",
-        height: "100%",
+        height: "300vh", // Reflecting extended height
         backgroundColor: "#000",
       }}
     />

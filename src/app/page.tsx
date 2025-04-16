@@ -4,12 +4,12 @@ import About from "./components/About";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
-// import AnimatedBG from "./components/AnimatedBG";
+import AnimatedBG from "./components/AnimatedBG";
 
 export default function Home() {
   return (
     <div className="mx-auto w-[80%] max-w-[950px] pt-[100px] md:pt-0">
-      {/* <AnimatedBG /> */}
+      <AnimatedBG />
       <NotionProvider>
         <NavigationBar />
         <div
