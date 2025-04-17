@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useState, useEffect, useContext } from "react";
 import notionLoad from "@/app/actions/notion";
+import PixelatedLoading from "./components/Loading";
 
 interface LandingPageData {
   Title: string;
@@ -49,13 +50,8 @@ const NotionContext = createContext<NotionContextType>({
 });
 
 const LoadingAnimation = () => (
-  <div className="fixed top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]">
-    <h1 className="text-4xl animate-pulse">Loading</h1>
-    <div className="flex justify-center items-center space-x-3 mt-6">
-      <div className="w-3 h-3 bg-sky-200 rounded-sm animate-bounce-delay-150" />
-      <div className="w-3 h-3 bg-sky-200 rounded-sm animate-bounce-delay-300" />
-      <div className="w-3 h-3 bg-sky-200 rounded-sm animate-bounce-delay-600" />
-    </div>
+  <div className="h-screen flex items-center justify-center">
+    <PixelatedLoading />
   </div>
 );
 
