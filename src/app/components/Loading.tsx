@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 
 const ROWS = 7;
 const TEXT = "Loading";
-const FALL_DELAY_MS = 60;
-const LOOP_DELAY_MS = 1500;
-const MAX_WIDTH = 500;
+const FALL_DELAY_MS = 45;
+const LOOP_DELAY_MS = 2000;
 
 // 5x7 pixel font
 const CHAR_MAP: Record<string, string[]> = {
@@ -15,7 +14,6 @@ const CHAR_MAP: Record<string, string[]> = {
   I: ["111", ".1.", ".1.", ".1.", ".1.", ".1.", "111"],
   N: ["1...1", "11..1", "1.1.1", "1..11", "1...1", "1...1", "1...1"],
   G: [".111.", "1...1", "1....", "1.111", "1...1", "1...1", ".111."],
-  ".": [".....", ".....", ".....", ".....", ".....", "..1..", "..1.."],
 };
 
 // Converts text to a grid of booleans
@@ -66,9 +64,8 @@ const PixelatedLoading: React.FC = () => {
 
   useEffect(() => {
     const updatePixelSize = () => {
-      const screenWidth = window.innerWidth;
       const maxCols = grid[0].length;
-      const maxUsableWidth = Math.min(screenWidth * 0.9, MAX_WIDTH);
+      const maxUsableWidth = 300
       const newPixelSize = Math.floor(maxUsableWidth / maxCols);
       setPixelSize(newPixelSize);
     };

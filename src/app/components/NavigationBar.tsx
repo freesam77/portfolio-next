@@ -63,7 +63,6 @@ const NavigationBar = () => {
       className={`fixed top-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] h-16 z-10 bg-white/20 backdrop-blur-md shadow-md md:rounded-full ${isMenuOpen ? "rounded-t-3xl" : "rounded-full"}`}
     >
       <div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
-        {/* Logo Section */}
         <div className="md:flex items-center">
           <a
             href={`#${sections[0].toLowerCase()}`}
@@ -75,7 +74,8 @@ const NavigationBar = () => {
               alt="React Logo"
               width="37"
             />
-            <h1 className="ml-3 mb-0">Samuel Razali</h1>
+            <h1 className="ml-3 mb-0 md:inline hidden">Samuel Razali</h1>
+            <h2 className="ml-3 mb-0 md:hidden inline">Samuel Razali</h2>
           </a>
         </div>
 
