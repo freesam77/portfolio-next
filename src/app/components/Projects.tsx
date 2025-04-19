@@ -53,7 +53,7 @@ const ProjectSection = (props: ProjectSectionProps) => {
   );
 
   return (
-    <div className="md:flex align-top bg-white/40 shadow-sm rounded-md p-8 md:p-4 mb-4">
+    <div className="card md:flex align-top p-8 md:p-4 mb-4">
       <img
         className={`md:mr-8 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${projectData.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
         src={

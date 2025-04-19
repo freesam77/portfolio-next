@@ -39,7 +39,6 @@ body {
         @apply font-semibold;
     }
 
-    /* Ensure custom styles are applied correctly */
     h1 {
         @apply text-3xl mb-2;
     }
@@ -60,39 +59,52 @@ body {
         @apply text-sky-400;
     }
 
+    button {
+        @apply mr-2 mb-2 px-2 py-1 bg-white/20 shadow-sm rounded-md hover:ring-2 hover:ring-sky-400 cursor-pointer backdrop-blur-[3px];
+    }
+
     button.active {
-        @apply bg-sky-400 text-slate-700;
+        @apply bg-sky-400/50;
+    }
+
+}
+
+@layer components {
+    .card {
+        @apply rounded-xl bg-white/20 shadow-sm backdrop-blur-[3px];
     }
 }
 
 
 @layer utilities {
-    @keyframes bounce-delay {
-        0% {
-            transform: translateY(0);
-        }
 
-        50% {
-            transform: translateY(-10px);
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+            transform: translateX(100px);
         }
 
         100% {
-            transform: translateY(0);
+            opacity: 1;
+            transform: translateX(0);
         }
     }
 
-    .animate-bounce-delay-150 {
-        animation: bounce-delay 2s infinite ease-in-out;
-        animation-delay: 150ms;
+    @keyframes fade-out {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
     }
 
-    .animate-bounce-delay-300 {
-        animation: bounce-delay 2s infinite ease-in-out;
-        animation-delay: 300ms;
+    .animate-fade-in {
+        animation: fade-in 0.5s ease-in forwards;
     }
 
-    .animate-bounce-delay-600 {
-        animation: bounce-delay 2s infinite ease-in-out;
-        animation-delay: 600ms;
+    .animate-fade-out {
+        animation: fade-out 0.5s ease-out forwards;
     }
 }

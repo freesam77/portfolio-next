@@ -55,16 +55,14 @@ const SkillGrid: React.FC = () => {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`mr-2 mb-2 px-2 py-1 bg-white/20 shadow-sm rounded-md hover:ring-2 hover:ring-sky-400 ${
-              selectedCategory === category && "active"
-            }`}
+            className={`${selectedCategory === category && "active"}`}
           >
             {category}
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {filteredSkills.map(({ skill, src }) => (
           <div
             key={skill}
@@ -72,9 +70,9 @@ const SkillGrid: React.FC = () => {
               exitingSkills.includes(skill)
                 ? "animate-fade-out"
                 : "animate-fade-in"
-            } md:flex shrink-0 rounded-xl bg-white/20 p-2 shadow-sm hover:ring-sky-600`}
+            } transition-all md:flex card py-2 md:py-0`}
           >
-            <div className="p-2 object-fill rounded-lg bg-white/70 shadow-sm size-20 flex items-center m-auto md:m-0">
+            <div className="p-2 object-fill rounded-xl bg-white/70 shadow-sm size-20 flex items-center m-auto md:m-0">
               <img src={src} />
             </div>
             <p className="my-auto text-center md:text-left text-xs md:text-lg mt-2 md:mt-auto md:ml-4">

@@ -60,7 +60,7 @@ const NavigationBar = () => {
 
   return (
     <nav
-      className={`fixed top-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] h-16 z-10 bg-white/20 backdrop-blur-md shadow-md md:rounded-full ${isMenuOpen ? "rounded-t-3xl" : "rounded-full"}`}
+      className={`fixed top-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md md:rounded-full ${isMenuOpen ? "rounded-t-3xl" : "rounded-full"}`}
     >
       <div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
         <div className="md:flex items-center">
