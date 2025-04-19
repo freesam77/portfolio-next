@@ -1,6 +1,5 @@
 "use client";
 import { createContext, useState, useEffect, useContext } from "react";
-import notionLoad from "@/app/actions/notion";
 import PixelatedLoading from "./components/Loading";
 
 interface LandingPageData {
@@ -60,11 +59,11 @@ export const NotionProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const fetchNotionData = async () => {
     try {
-      const response = await notionLoad();
-      const result = response.body;
+      const response = await fetch("/api/notion");
+      const result = await response.json();
 
       if (JSON.stringify(data) !== JSON.stringify(result)) {
-        setData(JSON.parse(result));
+        setData(result);
         setLoading(false);
       }
     } catch (error) {
