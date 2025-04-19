@@ -55,16 +55,8 @@ const LoadingAnimation = () => (
   </div>
 );
 
-const storedData =
-  typeof window !== "undefined"
-    ? localStorage.getItem("portfolioDataCache")
-    : "";
-
-// Notion Provider Component
 export const NotionProvider = ({ children }: { children: React.ReactNode }) => {
-  const [data, setData] = useState(() => {
-    return storedData ? JSON.parse(storedData) : null;
-  });
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const fetchNotionData = async () => {
     try {
@@ -74,7 +66,6 @@ export const NotionProvider = ({ children }: { children: React.ReactNode }) => {
       if (JSON.stringify(data) !== JSON.stringify(result)) {
         setData(JSON.parse(result));
         setLoading(false);
-        localStorage.setItem("portfolioDataCache", JSON.stringify(result));
       }
     } catch (error) {
       console.error("Error fetching Notion data:", error);
