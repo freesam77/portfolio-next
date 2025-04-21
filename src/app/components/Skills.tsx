@@ -12,8 +12,10 @@ interface Skill {
 const SkillGrid: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
-  const [exitingSkills, setExitingSkills] = useState<string[]>([]); // Track exiting skills
-  const skillset = useNotion().data?.skillset;
+  const [exitingSkills, setExitingSkills] = useState<string[]>([]);
+  const skillset = useNotion().data?.skillset?.filter(({ categories }) => {
+    return !categories.includes("Softskills");
+  });
 
   useEffect(() => {
     if (!skillset) return;
