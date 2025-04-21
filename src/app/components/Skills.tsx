@@ -72,9 +72,11 @@ const SkillGrid: React.FC = () => {
                 : "animate-fade-in"
             } transition-all md:flex card py-2 md:py-0`}
           >
-            <div className="p-2 object-fill rounded-xl bg-white/70 shadow-sm size-20 flex items-center m-auto md:m-0">
-              <img src={src} />
-            </div>
+            {src && (
+              <div className="p-2 object-fill rounded-xl bg-white/70 shadow-sm size-20 flex items-center m-auto md:m-0">
+                <img src={src} />
+              </div>
+            )}
             <p className="my-auto text-center md:text-left text-xs md:text-lg mt-2 md:mt-auto md:ml-4">
               {skill}
             </p>
