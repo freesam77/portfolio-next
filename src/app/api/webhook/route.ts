@@ -1,19 +1,32 @@
 import client from "@/app/lib/redis";
 import FetchNotion from "@/app/lib/notionFetch";
-// import { NextRequest } from "next/server";
 
 export async function POST(req: Request) {
-  // TODO: validate
-  //   const secret = req.headers.get("x-notion-secret");
-  //   if (secret !== process.env.NOTION_WEBHOOK_SECRET) {
-  //     return new NextResponse("Unauthorized", { status: 401 });
-  //   }
-  const body = await req.json();
-  console.log("Received webhook:", body);
-  
   try {
+    const contentType = req.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      return new Response("Content-Type must be application/json", {
+        status: 400,
+      });
+    }
+
+    const payload = await req.json();
+    const validWorkspaceId = process.env.VALID_WORKSPACE_ID;
+
+    if (!validWorkspaceId) {
+      console.error(
+        "❌ VALID_WORKSPACE_ID is not defined in environment variables.",
+      );
+      return new Response("Server misconfiguration", { status: 500 });
+    }
+
+    if (payload.workspace_id !== validWorkspaceId) {
+      return Response.json({ error: "Invalid workspace ID" }, { status: 403 });
+    }
+
     const result = await FetchNotion();
     await client.set("portfolioData", JSON.stringify(result));
+
     return Response.json({ success: true });
   } catch (error) {
     console.error("❌ Error handling webhook:", error);
