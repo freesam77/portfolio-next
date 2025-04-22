@@ -11,6 +11,9 @@ export async function GET() {
     await client.set("portfolioData", JSON.stringify(result));
     return Response.json(result, { status: 200 });
   } catch (error) {
-    return Response.json({ error: "Failed to fetch data" }, { status: 500 });
+    return Response.json(
+      { error, message: "Failed to fetch data" },
+      { status: 500 },
+    );
   }
 }
