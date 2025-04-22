@@ -9,6 +9,7 @@ NOTION_API_KEY=your-notion-api-key
 NOTION_SKILLSET_DATABASE_ID=your-skillset-database-id
 NOTION_DATABASE_ID=your-database-id
 NOTION_PROJECTS_DATABASE_ID=your-projects-database-id
+REDIS_URL=redis-db-url
 ```
 
 These variables are required for backend functionality and integration with Notion APIs.
