@@ -9,7 +9,7 @@ import {
 } from "@notionhq/client/build/src/api-endpoints";
 
 import notionDatabaseProcessor from "@/app/lib/notionDatabaseProcessor";
-import extractHTMLFromPage from "./notionToHTML";
+import notionPageToHTML from "./notionPageToHTML";
 
 // Initialize Notion client
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
@@ -32,7 +32,7 @@ const sectionFetch = async (
 ) => {
   let result;
   if (pageFetch) {
-    result = await extractHTMLFromPage(database_id, notion);
+    result = await notionPageToHTML(database_id, notion);
   } else {
     const response = await notion.databases.query({ database_id });
     result = response.results.map((item) =>
