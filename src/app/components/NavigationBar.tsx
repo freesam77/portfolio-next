@@ -55,7 +55,7 @@ const NavigationBar = () => {
   }, []);
 
   const handleAnchorClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    event: React.MouseEvent<HTMLElement>,
     section: string,
   ) => {
     event.preventDefault();
@@ -169,7 +169,7 @@ const NavigationBar = () => {
 
             if (isResume) {
               return (
-                <span>
+                <span key={section.toLowerCase()}>
                   <div
                     className={`px-6 py-4 ${isActive && "bg-gradient-to-r from-sky-300/30 to-white/0"}`}
                   >
