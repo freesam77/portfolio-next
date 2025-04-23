@@ -7,7 +7,7 @@ const sections = ["About", "Skillset", "Projects", "Contact", "Resume"];
 
 const NavigationBar = () => {
   const [activeSection, setActiveSection] = useState(sections[0]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for toggling menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +39,21 @@ const NavigationBar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.replace("#", "");
+      const targetElement = document.getElementById(id);
+      if (targetElement) {
+        const targetPosition = targetElement.offsetTop - 100;
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, []);
+
   const handleAnchorClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     section: string,
@@ -47,11 +62,17 @@ const NavigationBar = () => {
 
     const targetElement = document.getElementById(section.toLowerCase());
     if (targetElement) {
-      const targetPosition = targetElement.offsetTop * 0.9;
+      const targetPosition = targetElement.offsetTop - 100;
       window.scrollTo({
         top: targetPosition,
         behavior: "smooth",
       });
+    }
+
+    if (section.toLowerCase() === sections[0].toLowerCase()) {
+      window.history.replaceState(null, "", window.location.pathname);
+    } else {
+      window.history.pushState(null, "", `#${section.toLowerCase()}`);
     }
 
     // Close menu after click on mobile
@@ -60,12 +81,11 @@ const NavigationBar = () => {
 
   return (
     <nav
-      className={`fixed top-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md md:rounded-full ${isMenuOpen ? "rounded-t-3xl" : "rounded-full"}`}
+      className={`fixed top-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] md:h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md md:rounded-full ${isMenuOpen ? "rounded-t-3xl" : "rounded-full"}`}
     >
       <div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
         <div className="md:flex items-center">
-          <a
-            href={`#${sections[0].toLowerCase()}`}
+          <span
             onClick={(e) => handleAnchorClick(e, sections[0])}
             className="flex items-center justify-center"
           >
@@ -76,96 +96,107 @@ const NavigationBar = () => {
             />
             <h1 className="ml-3 mb-0 md:inline hidden">Samuel Razali</h1>
             <h2 className="ml-3 mb-0 md:hidden inline">Samuel Razali</h2>
-          </a>
+          </span>
         </div>
 
         {/* Navigation Items for Web*/}
-        <ul className={"hidden md:flex space-x-6 items-center"}>
+        <ul className={"hidden md:flex items-center h-[100%]"}>
           {sections.map((section) => {
             const isResume = section.toLowerCase() === "resume";
-            const href = isResume
+            const id = isResume
               ? "https://heathered-efraasia-c7f.notion.site/Samuel-Razali-15c6f18f89a580169455e76b99d0ae7d?pvs=4"
               : `#${section.trim().toLowerCase()}`;
-            const isActive = activeSection === section;
+            const isActive =
+              activeSection === section &&
+              activeSection.toLowerCase() !== sections[0].toLowerCase();
+
+            if (isResume) {
+              return (
+                <li key="resume" className="nav-link">
+                  <a href={id} target="_blank">
+                    <DescriptionOutlinedIcon
+                      fontSize="small"
+                      viewBox="8 0 10 30"
+                    />
+                    Resume
+                  </a>
+                </li>
+              );
+            }
 
             return (
-              <li key={section.toLowerCase()}>
-                <a
-                  href={href}
+              <li
+                key={section.toLowerCase()}
+                className={`nav-link ${isActive && "nav-link-active"}`}
+              >
+                <span
+                  id={id}
                   onClick={
                     isResume ? undefined : (e) => handleAnchorClick(e, section)
                   }
                   className={`${
                     isActive && "active-link"
                   } ${isResume && "border-l-2 pl-4 block"}`}
-                  target={isResume ? "_blank" : undefined}
-                  rel={isResume ? "noopener noreferrer" : undefined}
                 >
-                  {isResume ? (
-                    <span>
-                      <DescriptionOutlinedIcon
-                        fontSize="small"
-                        viewBox="8 0 10 30"
-                      />
-                      Resume
-                    </span>
-                  ) : (
-                    section
-                  )}
-                </a>
+                  {section}
+                </span>
               </li>
             );
           })}
         </ul>
 
-        <button
-          className="md:hidden"
+        <span
+          className="md:hidden m-0 h-16 content-center"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <Close /> : <Menu />}
-        </button>
+        </span>
       </div>
 
       {/* Navigation Items for Mobile*/}
       {isMenuOpen && (
         <div
           className={
-            "md:hidden backdrop-blur-lg bg-sky-900/90 shadow-md text-xl rounded-b-3xl z-50"
+            "md:hidden backdrop-blur-[3px] bg-sky-900/60 shadow-md text-xl rounded-b-3xl z-50"
           }
         >
           {sections.map((section) => {
             const isResume = section.toLowerCase() === "resume";
-            const href = isResume
+            const id = isResume
               ? "https://heathered-efraasia-c7f.notion.site/Samuel-Razali-15c6f18f89a580169455e76b99d0ae7d?pvs=4"
               : `#${section.trim().toLowerCase()}`;
             const isActive = activeSection === section;
 
+            if (isResume) {
+              return (
+                <span>
+                  <div
+                    className={`px-6 py-4 ${isActive && "bg-gradient-to-r from-sky-300/30 to-white/0"}`}
+                  >
+                    <DescriptionOutlinedIcon
+                      fontSize="small"
+                      viewBox="8 0 10 30"
+                    />
+                    Resume
+                  </div>
+                </span>
+              );
+            }
+
             return (
-              <a
-                href={href}
+              <span
+                id={id}
                 key={section.toLowerCase()}
                 onClick={
                   isResume ? undefined : (e) => handleAnchorClick(e, section)
                 }
-                target={isResume ? "_blank" : undefined}
-                rel={isResume ? "noopener noreferrer" : undefined}
               >
                 <div
                   className={`px-6 py-4 ${isActive && "bg-gradient-to-r from-sky-300/30 to-white/0"}`}
                 >
-                  {isResume ? (
-                    <span>
-                      <DescriptionOutlinedIcon
-                        fontSize="small"
-                        viewBox="8 0 10 30"
-                      />
-                      Resume
-                    </span>
-                  ) : (
-                    section
-                  )}
+                  {section}
                 </div>
-              </a>
+              </span>
             );
           })}
         </div>
