@@ -1,5 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Funnel_Display, Outfit } from "next/font/google";
+
+const funnel = Funnel_Display({
+  subsets: ["latin"],
+  variable: "--font-funnel",
+});
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+});
 
 export const metadata: Metadata = {
   title: "Samuel Razali",
@@ -13,7 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased ${outfit.variable} ${funnel.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }
