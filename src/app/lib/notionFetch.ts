@@ -24,8 +24,8 @@ const isPageObjectResponse = (
   return "properties" in item;
 };
 
-const sectionFetch = async (databaseId: string, sectionName: string) => {
-  const response = await notion.databases.query({ database_id: databaseId });
+const sectionFetch = async (database_id: string, sectionName: string) => {
+  const response = await notion.databases.query({ database_id });
   const processedItems = response.results.map((item) =>
     isPageObjectResponse(item) ? notionDatabaseProcessor(item) : {},
   );
@@ -34,13 +34,10 @@ const sectionFetch = async (databaseId: string, sectionName: string) => {
 
 const FetchNotion = async () => {
   const sections = await Promise.all([
-    sectionFetch(process.env.NOTION_DATABASE_ID!, "landingPage"),
-    sectionFetch(process.env.NOTION_PROJECTS_DATABASE_ID!, "projects"),
-    sectionFetch(process.env.NOTION_SKILLSET_DATABASE_ID!, "skillset"),
-    sectionFetch(
-      process.env.NOTION_ONLINE_PRESENCE_DATABASE_ID!,
-      "contact",
-    ),
+    sectionFetch(process.env.NOTION_LANDING_PAGE_DB!, "landingPage"),
+    sectionFetch(process.env.NOTION_PROJECTS_DB!, "projects"),
+    sectionFetch(process.env.NOTION_SKILLSET_DB!, "skillset"),
+    sectionFetch(process.env.NOTION_ONLINE_PRESENCE_DB!, "contact"),
   ]);
   const result = Object.assign({}, ...sections);
   return result;

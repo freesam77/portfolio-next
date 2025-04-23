@@ -6,9 +6,9 @@ Create a `.env` file in the root directory and include the following variables:
 
 ```
 NOTION_API_KEY=your-notion-api-key
-NOTION_SKILLSET_DATABASE_ID=your-skillset-database-id
-NOTION_DATABASE_ID=your-database-id
-NOTION_PROJECTS_DATABASE_ID=your-projects-database-id
+NOTION_SKILLSET_DB=your-skillset-database-id
+NOTION_LANDING_PAGE_DB=your-database-id
+NOTION_PROJECTS_DB=your-projects-database-id
 REDIS_URL=redis-db-url
 ```
 
