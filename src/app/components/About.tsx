@@ -8,7 +8,7 @@ const About = () => {
       <>
         <p
           dangerouslySetInnerHTML={{
-            __html: landingPage[0].Description,
+            __html: landingPage,
           }}
         />
       </>
