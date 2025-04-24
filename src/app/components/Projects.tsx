@@ -33,16 +33,16 @@ const ProjectSection = (props: ProjectSectionProps) => {
           <h2 className="mx-auto text-center md:text-left">
             {projectData.projectName}
           </h2>
-          <ul className="flex flex-wrap mb-4 justify-center md:justify-normal">
+          <div className="flex flex-wrap mb-4 justify-center md:justify-normal">
             {projectData.stack.sort().map((stackItem, index) => (
-              <li
+              <span
                 className="bg-sky-900 shadow-sm rounded-md px-2 py-1 mr-2 mt-2 md:mt-0 text-xs"
                 key={`${stackItem}-${index}`}
               >
                 {stackItem}
-              </li>
+              </span>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
       <p

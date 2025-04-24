@@ -99,7 +99,7 @@ const NavigationBar = () => {
         </div>
 
         {/* Navigation Items for Web*/}
-        <ul className={"hidden md:flex items-center h-[100%] text-lg"}>
+        <div className={"hidden md:flex items-center h-[100%] text-lg"}>
           {sections.map((section) => {
             const isResume = section.toLowerCase() === "resume";
             const id = isResume
@@ -109,7 +109,7 @@ const NavigationBar = () => {
 
             if (isResume) {
               return (
-                <li key="resume" className="nav-link">
+                <span key="resume" className="nav-link">
                   <a
                     href={id}
                     target="_blank"
@@ -121,12 +121,12 @@ const NavigationBar = () => {
                     />
                     Resume
                   </a>
-                </li>
+                </span>
               );
             }
 
             return (
-              <li
+              <span
                 key={section.toLowerCase()}
                 className={`nav-link ${isActive && "nav-link-active"}`}
               >
@@ -141,10 +141,10 @@ const NavigationBar = () => {
                 >
                   {section}
                 </span>
-              </li>
+              </span>
             );
           })}
-        </ul>
+        </div>
 
         <span
           className="md:hidden m-0 h-16 content-center"

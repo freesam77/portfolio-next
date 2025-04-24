@@ -35,37 +35,71 @@ const getBlocks = async (
 };
 
 const blocksToHTML = (blocks: BlockObjectResponse[]): string => {
-  return blocks
-    .map((block) => {
-      switch (block.type) {
-        case "paragraph":
-          return `<p>${extractRichText(block.paragraph.rich_text)}</p>`;
-        case "heading_1":
-          return `<h1>${extractRichText(block.heading_1.rich_text)}</h1>`;
-        case "heading_2":
-          return `<h2>${extractRichText(block.heading_2.rich_text)}</h2>`;
-        case "heading_3":
-          return `<h3>${extractRichText(block.heading_3.rich_text)}</h3>`;
-        case "bulleted_list_item":
-          return `<li>${extractRichText(block.bulleted_list_item.rich_text)}</li>`;
-        case "numbered_list_item":
-          return `<li>${extractRichText(block.numbered_list_item.rich_text)}</li>`;
-        case "image":
-          const imageUrl =
-            block.image.type === "external"
-              ? block.image.external.url
-              : block.image.file.url;
-          return `<img src="${imageUrl}" alt="Image"/>`;
-        default:
-          return `<div>Unsupported block: ${block.type}</div>`;
-      }
-    })
-    .join("\n");
+  let html = "";
+  let listBuffer: string[] = [];
+  let currentListType: "ul" | "ol" | null = null;
+
+  const flushList = () => {
+    if (currentListType && listBuffer.length > 0) {
+      html += `<${currentListType}>\n${listBuffer.join("\n")}\n</${currentListType}>\n`;
+      listBuffer = [];
+      currentListType = null;
+    }
+  };
+
+  for (const block of blocks) {
+    switch (block.type) {
+      case "paragraph":
+        flushList();
+        html += `<p>${extractRichText(block.paragraph.rich_text)}</p>\n`;
+        break;
+      case "heading_1":
+        flushList();
+        html += `<h1>${extractRichText(block.heading_1.rich_text)}</h1>\n`;
+        break;
+      case "heading_2":
+        flushList();
+        html += `<h2>${extractRichText(block.heading_2.rich_text)}</h2>\n`;
+        break;
+      case "heading_3":
+        flushList();
+        html += `<h3>${extractRichText(block.heading_3.rich_text)}</h3>\n`;
+        break;
+      case "bulleted_list_item":
+        if (currentListType !== "ul") flushList();
+        currentListType = "ul";
+        listBuffer.push(
+          `<li>${extractRichText(block.bulleted_list_item.rich_text)}</li>`,
+        );
+        break;
+      case "numbered_list_item":
+        if (currentListType !== "ol") flushList();
+        currentListType = "ol";
+        listBuffer.push(
+          `<li>${extractRichText(block.numbered_list_item.rich_text)}</li>`,
+        );
+        break;
+      case "image":
+        flushList();
+        const imageUrl =
+          block.image.type === "external"
+            ? block.image.external.url
+            : block.image.file.url;
+        html += `<img src="${imageUrl}" alt="Image"/>\n`;
+        break;
+      default:
+        flushList();
+        html += `<div>Unsupported block: ${block.type}</div>\n`;
+        break;
+    }
+  }
+
+  flushList(); // In case the last blocks are list items
+
+  return html.trim();
 };
 
-const extractRichText = (
-  richTextArray: RichTextItemResponse[],
-): string =>
+const extractRichText = (richTextArray: RichTextItemResponse[]): string =>
   richTextArray
     .map((rt) => {
       const mapColor = (notionColor: string): string => {

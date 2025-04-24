@@ -30,18 +30,33 @@ const pageFetch = async (database_id: string, sectionName: string) => {
   return { [sectionName]: result };
 };
 
-const databaseFetch = async (database_id: string, sectionName: string) => {
+const databaseFetch = async (
+  database_id: string,
+  sectionName: string,
+  pageContentAsDescription: boolean = false,
+) => {
   const response = await notion.databases.query({ database_id });
-  const result = response.results.map((item) =>
-    isPageObjectResponse(item) ? notionDatabaseProcessor(item.properties) : {},
-  );
+  const result = response.results.map((item) => {
+    if (isPageObjectResponse(item)) {
+      const processedData = notionDatabaseProcessor(item.properties);
+      if (pageContentAsDescription) {
+        notionPageToHTML(item.id, notion).then((description) => {
+          Object.assign(processedData, {
+            description,
+          });
+        });
+      }
+      return processedData;
+    }
+    return {};
+  });
   return { [sectionName]: result };
 };
 
 const FetchNotion = async () => {
   const sections = await Promise.all([
     pageFetch(process.env.NOTION_LANDING_PAGE_DB!, "landingPage"),
-    databaseFetch(process.env.NOTION_PROJECTS_DB!, "projects"),
+    databaseFetch(process.env.NOTION_PROJECTS_DB!, "projects", true),
     databaseFetch(process.env.NOTION_SKILLSET_DB!, "skillset"),
     databaseFetch(process.env.NOTION_ONLINE_PRESENCE_DB!, "contact"),
   ]);

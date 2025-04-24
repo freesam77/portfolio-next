@@ -16,6 +16,9 @@ body {
 
 
 @layer base {
+    ul, ol, menu {
+        @apply [list-style-type:unset] ml-6
+    }
 
     h1,
     h2,
