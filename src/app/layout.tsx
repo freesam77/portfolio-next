@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Funnel_Display, Outfit } from "next/font/google";
+import { Outfit, Funnel_Sans } from "next/font/google";
 
-const funnel = Funnel_Display({
+const funnel = Funnel_Sans({
   subsets: ["latin"],
+  weight: ["300"],
   variable: "--font-funnel",
 });
 const outfit = Outfit({
