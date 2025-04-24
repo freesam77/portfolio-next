@@ -81,39 +81,40 @@ const NavigationBar = () => {
 
   return (
     <nav
-      className={`fixed top-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] md:h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md md:rounded-full ${isMenuOpen ? "rounded-t-3xl" : "rounded-full"}`}
+      className={`fixed top-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] md:h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md md:rounded-full ${isMenuOpen ? "rounded-t-3xl rounded-b-3xl" : "rounded-full"}`}
     >
       <div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
         <div className="md:flex items-center">
           <span
             onClick={(e) => handleAnchorClick(e, sections[0])}
-            className="flex items-center justify-center"
+            className="flex items-center justify-center cursor-pointer"
           >
             <img
               src="/sam_2019_darkmode_blue_gradient.svg"
               alt="React Logo"
               width="37"
             />
-            <h1 className="ml-3 mb-0 md:inline hidden">Samuel Razali</h1>
-            <h2 className="ml-3 mb-0 md:hidden inline">Samuel Razali</h2>
+            <h1 className="ml-3 mb-0">Samuel Razali</h1>
           </span>
         </div>
 
         {/* Navigation Items for Web*/}
-        <ul className={"hidden md:flex items-center h-[100%]"}>
+        <ul className={"hidden md:flex items-center h-[100%] text-lg"}>
           {sections.map((section) => {
             const isResume = section.toLowerCase() === "resume";
             const id = isResume
               ? "https://heathered-efraasia-c7f.notion.site/Samuel-Razali-15c6f18f89a580169455e76b99d0ae7d?pvs=4"
               : `#${section.trim().toLowerCase()}`;
-            const isActive =
-              activeSection === section &&
-              activeSection.toLowerCase() !== sections[0].toLowerCase();
+            const isActive = activeSection === section;
 
             if (isResume) {
               return (
                 <li key="resume" className="nav-link">
-                  <a href={id} target="_blank">
+                  <a
+                    href={id}
+                    target="_blank"
+                    className="text-gray-200 hover:[text-shadow:_0_0_17px] hover:text-sky-300"
+                  >
                     <DescriptionOutlinedIcon
                       fontSize="small"
                       viewBox="8 0 10 30"
@@ -155,11 +156,7 @@ const NavigationBar = () => {
 
       {/* Navigation Items for Mobile*/}
       {isMenuOpen && (
-        <div
-          className={
-            "md:hidden backdrop-blur-[3px] bg-sky-900/60 shadow-md text-xl rounded-b-3xl z-50"
-          }
-        >
+        <div className={"md:hidden bg-black/60 text-lg rounded-b-3xl z-50"}>
           {sections.map((section) => {
             const isResume = section.toLowerCase() === "resume";
             const id = isResume
