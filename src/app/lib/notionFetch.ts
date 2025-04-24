@@ -25,29 +25,25 @@ const isPageObjectResponse = (
   return "properties" in item;
 };
 
-const sectionFetch = async (
-  database_id: string,
-  sectionName: string,
-  pageFetch: boolean = false,
-) => {
-  let result;
-  if (pageFetch) {
-    result = await notionPageToHTML(database_id, notion);
-  } else {
-    const response = await notion.databases.query({ database_id });
-    result = response.results.map((item) =>
-      isPageObjectResponse(item) ? notionDatabaseProcessor(item) : {},
-    );
-  }
+const pageFetch = async (database_id: string, sectionName: string) => {
+  const result = await notionPageToHTML(database_id, notion);
+  return { [sectionName]: result };
+};
+
+const databaseFetch = async (database_id: string, sectionName: string) => {
+  const response = await notion.databases.query({ database_id });
+  const result = response.results.map((item) =>
+    isPageObjectResponse(item) ? notionDatabaseProcessor(item.properties) : {},
+  );
   return { [sectionName]: result };
 };
 
 const FetchNotion = async () => {
   const sections = await Promise.all([
-    sectionFetch(process.env.NOTION_LANDING_PAGE_DB!, "landingPage", true),
-    sectionFetch(process.env.NOTION_PROJECTS_DB!, "projects"),
-    sectionFetch(process.env.NOTION_SKILLSET_DB!, "skillset"),
-    sectionFetch(process.env.NOTION_ONLINE_PRESENCE_DB!, "contact"),
+    pageFetch(process.env.NOTION_LANDING_PAGE_DB!, "landingPage"),
+    databaseFetch(process.env.NOTION_PROJECTS_DB!, "projects"),
+    databaseFetch(process.env.NOTION_SKILLSET_DB!, "skillset"),
+    databaseFetch(process.env.NOTION_ONLINE_PRESENCE_DB!, "contact"),
   ]);
 
   const result = Object.assign({}, ...sections);
