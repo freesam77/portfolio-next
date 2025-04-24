@@ -28,7 +28,6 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         className="fixed inset-0 z-50 flex justify-center bg-gray-600/70 backdrop-blur-sm"
         onClick={onClose}
       >
-        {/* Nav */}
         <div className="w-full top-0 h-[120px] fixed p-6 bg-gradient-to-b from-slate-900 to-transparent">
           <div className="flex justify-end">
             <button

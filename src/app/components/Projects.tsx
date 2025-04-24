@@ -53,18 +53,32 @@ const ProjectSection = (props: ProjectSectionProps) => {
   );
 
   return (
-    <div className="card md:flex align-top p-8 md:p-4 mb-4">
-      <img
-        className={`md:mr-8 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${projectData.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
-        src={
-          projectData.mediaUrl || "https://placehold.co/600x400?text=No+Preview"
-        }
-        onClick={() => {
+    <div>
+      <div className="card md:flex align-top p-8 md:p-4 mb-4">
+        <img
+          className={`md:mr-8 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${projectData.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
+          src={
+            projectData.mediaUrl ||
+            "https://placehold.co/600x400?text=No+Preview"
+          }
+          onClick={() => {
             if (projectData.mediaUrl) {
               setModalOpen(true);
             }
           }}
-      />
+        />
+
+        {projectDetails()}
+        {projectData.url && (
+          <a
+            href={projectData.url}
+            className="flex justify-end md:justify-start"
+          >
+            <LinkRounded />
+            <p className="md:hidden ml-1 italic">Link to Project</p>
+          </a>
+        )}
+      </div>
       <Modal
         isOpen={modalOpen}
         onClose={() => {
@@ -79,13 +93,6 @@ const ProjectSection = (props: ProjectSectionProps) => {
           }
         />
       </Modal>
-      {projectDetails()}
-      {projectData.url && (
-        <a href={projectData.url} className="flex justify-end md:justify-start">
-          <LinkRounded />
-          <p className="md:hidden ml-1 italic">Link to Project</p>
-        </a>
-      )}
     </div>
   );
 };
