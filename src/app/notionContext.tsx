@@ -59,7 +59,7 @@ export const NotionProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const fetchNotionData = async () => {
     try {
-      const response = await fetch("/api/notion", { cache: "no-store" });
+      const response = await fetch("/api/notion");
       const result = await response.json();
 
       if (JSON.stringify(data) !== JSON.stringify(result)) {
