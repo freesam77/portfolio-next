@@ -1,14 +1,13 @@
 "use client";
-import { useNotion } from "../notionContext";
+import type { LandingPageData } from "../types";
 
-const About = () => {
-  const landingPage = useNotion().data?.landingPage;
-  if (landingPage) {
+const About = ({ data }: { data: LandingPageData }) => {
+  if (data) {
     return (
       <>
         <p
           dangerouslySetInnerHTML={{
-            __html: landingPage,
+            __html: data,
           }}
         />
       </>

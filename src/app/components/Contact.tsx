@@ -1,12 +1,12 @@
 "use client";
-import { useNotion } from "../notionContext";
 import Tooltip from "./Tooltip";
+import type { ContactData } from "../types";
 
-const Contact = () => {
+const Contact = ({ data }: { data: ContactData[] }) => {
   return (
     <div className="bg-gradient-to-t from-sky-300/40 to-white/0 backdrop-blur-xs py-8">
       <div className="flex justify-between w-[200px] py-6 mx-auto">
-        {useNotion().data?.contact?.map(({ OnlinePresence, Links, Icon }) => (
+        {data.map(({ OnlinePresence, Links, Icon }) => (
           <Tooltip
             description={OnlinePresence}
             key={`${OnlinePresence}-${Links}`}

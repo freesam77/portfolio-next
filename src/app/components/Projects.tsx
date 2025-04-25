@@ -1,28 +1,12 @@
 "use client";
 import { LinkRounded } from "@mui/icons-material";
-import { useNotion } from "../notionContext";
 import Modal from "./Modal";
 import { useState } from "react";
+import type { ProjectData } from "../types";
 
-interface ProjectData {
-  projectName: string;
-  client: string;
-  description: string;
-  stack: string[];
-  url: string;
-  mediaUrl: string;
-  hidden: boolean;
-  order: number;
-}
-
-type ProjectSectionProps = {
-  projectData?: ProjectData;
-};
-
-const ProjectSection = (props: ProjectSectionProps) => {
+const ProjectSection = ({ data }: { data: ProjectData }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { projectData } = props;
-  if (!projectData) {
+  if (!data) {
     return <div>There is no project data</div>;
   }
 
@@ -31,10 +15,10 @@ const ProjectSection = (props: ProjectSectionProps) => {
       <div className="md:flex justify-between mb-4">
         <div className="m-auto md:m-0">
           <h2 className="mx-auto text-center md:text-left">
-            {projectData.projectName}
+            {data.projectName}
           </h2>
           <div className="flex flex-wrap mb-4 justify-center md:justify-normal">
-            {projectData.stack.sort().map((stackItem, index) => (
+            {data.stack.sort().map((stackItem, index) => (
               <span
                 className="bg-sky-900 shadow-sm rounded-md px-2 py-1 mr-2 mt-2 md:mt-0 text-xs"
                 key={`${stackItem}-${index}`}
@@ -47,7 +31,7 @@ const ProjectSection = (props: ProjectSectionProps) => {
       </div>
       <p
         className="mb-4"
-        dangerouslySetInnerHTML={{ __html: projectData.description }}
+        dangerouslySetInnerHTML={{ __html: data.description }}
       />
     </div>
   );
@@ -56,24 +40,18 @@ const ProjectSection = (props: ProjectSectionProps) => {
     <div>
       <div className="card md:flex align-top p-8 md:p-4 mb-4">
         <img
-          className={`md:mr-8 m-auto md:m-0 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${projectData.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
-          src={
-            projectData.mediaUrl ||
-            "https://placehold.co/600x400?text=No+Preview"
-          }
+          className={`md:mr-8 m-auto md:m-0 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${data.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
+          src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
           onClick={() => {
-            if (projectData.mediaUrl) {
+            if (data.mediaUrl) {
               setModalOpen(true);
             }
           }}
         />
 
         {projectDetails()}
-        {projectData.url && (
-          <a
-            href={projectData.url}
-            className="flex justify-end md:justify-start"
-          >
+        {data.url && (
+          <a href={data.url} className="flex justify-end md:justify-start">
             <LinkRounded />
             <p className="md:hidden ml-1 italic">Link to Project</p>
           </a>
@@ -87,20 +65,15 @@ const ProjectSection = (props: ProjectSectionProps) => {
       >
         <img
           className="rounded-sm mx-auto"
-          src={
-            projectData.mediaUrl ||
-            "https://placehold.co/600x400?text=No+Preview"
-          }
+          src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
         />
       </Modal>
     </div>
   );
 };
 
-const Projects = () => {
-  const projects = useNotion().data?.projects || [];
-
-  const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
+const Projects = ({ data }: { data: ProjectData[] }) => {
+  const sortedProjects = [...data].sort((a, b) => a.order - b.order);
 
   return (
     <div>
@@ -108,7 +81,7 @@ const Projects = () => {
         return (
           !project.hidden && (
             <ProjectSection
-              projectData={project}
+              data={project}
               key={`${project.projectName}-${project.order}`}
             />
           )

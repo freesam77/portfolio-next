@@ -1,19 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useNotion } from "../notionContext";
+import type { SkillsetData } from "../types";
 
-interface Skill {
-  mastery: number;
-  categories: string[];
-  skill: string;
-  src: string;
-}
-
-const SkillGrid: React.FC = () => {
+const Skillset = ({ data }: { data: SkillsetData[] }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
+  const [filteredSkills, setFilteredSkills] = useState<SkillsetData[]>([]);
   const [exitingSkills, setExitingSkills] = useState<string[]>([]);
-  const skillset = useNotion().data?.skillset?.filter(({ categories }) => {
+  const skillset = data.filter(({ categories }) => {
     return !categories.includes("Softskills");
   });
 
@@ -89,4 +82,4 @@ const SkillGrid: React.FC = () => {
   );
 };
 
-export default SkillGrid;
+export default Skillset;

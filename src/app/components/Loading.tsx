@@ -65,7 +65,7 @@ const PixelatedLoading: React.FC = () => {
   useEffect(() => {
     const updatePixelSize = () => {
       const maxCols = grid[0].length;
-      const maxUsableWidth = 300
+      const maxUsableWidth = 300;
       const newPixelSize = Math.floor(maxUsableWidth / maxCols);
       setPixelSize(newPixelSize);
     };
@@ -89,28 +89,30 @@ const PixelatedLoading: React.FC = () => {
   }, [key]);
 
   return (
-    <div
-      key={key}
-      style={{
-        display: "grid",
-        gridTemplateRows: `repeat(${ROWS}, ${pixelSize}px)`,
-        gridTemplateColumns: `repeat(${grid[0].length}, ${pixelSize}px)`,
-        gap: `${Math.max(1, Math.floor(pixelSize / 6))}px`,
-      }}
-    >
-      {grid.map((row, rowIndex) =>
-        row.map((cell, colIndex) => {
-          const delay = colIndex * FALL_DELAY_MS + rowIndex * 25;
-          return (
-            <Pixel
-              key={`${rowIndex}-${colIndex}`}
-              isVisible={visible && cell}
-              delay={delay}
-              pixelSize={pixelSize}
-            />
-          );
-        }),
-      )}
+    <div className="h-screen flex items-center justify-center">
+      <div
+        key={key}
+        style={{
+          display: "grid",
+          gridTemplateRows: `repeat(${ROWS}, ${pixelSize}px)`,
+          gridTemplateColumns: `repeat(${grid[0].length}, ${pixelSize}px)`,
+          gap: `${Math.max(1, Math.floor(pixelSize / 6))}px`,
+        }}
+      >
+        {grid.map((row, rowIndex) =>
+          row.map((cell, colIndex) => {
+            const delay = colIndex * FALL_DELAY_MS + rowIndex * 25;
+            return (
+              <Pixel
+                key={`${rowIndex}-${colIndex}`}
+                isVisible={visible && cell}
+                delay={delay}
+                pixelSize={pixelSize}
+              />
+            );
+          }),
+        )}
+      </div>
     </div>
   );
 };

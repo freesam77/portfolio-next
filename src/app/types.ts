@@ -1,0 +1,39 @@
+export interface LandingPageData {
+  description: string;
+}
+
+export interface ProjectData {
+  projectName: string;
+  client: string;
+  description: string;
+  stack: string[];
+  url: string;
+  mediaUrl: string;
+  hidden: boolean;
+  order: number;
+}
+
+export interface SkillsetData {
+  mastery: number;
+  categories: string[];
+  skill: string;
+  src: string;
+}
+
+export interface ContactData {
+  OnlinePresence: string;
+  Links: string;
+  Icon: string;
+}
+
+export type NotionDataType = {
+  landingPage?: LandingPageData;
+  skillset?: SkillsetData[];
+  projects?: ProjectData[];
+  contact?: ContactData[];
+};
+
+export type NotionContextType = {
+  data: NotionDataType | null;
+  loading: boolean;
+};
