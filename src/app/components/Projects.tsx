@@ -56,7 +56,7 @@ const ProjectSection = (props: ProjectSectionProps) => {
     <div>
       <div className="card md:flex align-top p-8 md:p-4 mb-4">
         <img
-          className={`md:mr-8 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${projectData.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
+          className={`md:mr-8 m-auto md:m-0 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${projectData.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
           src={
             projectData.mediaUrl ||
             "https://placehold.co/600x400?text=No+Preview"
