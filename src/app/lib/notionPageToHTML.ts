@@ -34,7 +34,10 @@ const getBlocks = async (
   return blocks;
 };
 
-const blocksToHTML = (blocks: BlockObjectResponse[]): string => {
+const blocksToHTML = async (
+  blocks: BlockObjectResponse[],
+  notionClient?: Client,
+): Promise<string> => {
   let html = "";
   let listBuffer: string[] = [];
   let currentListType: "ul" | "ol" | null = null;
@@ -87,6 +90,36 @@ const blocksToHTML = (blocks: BlockObjectResponse[]): string => {
             : block.image.file.url;
         html += `<img src="${imageUrl}" alt="Image"/>\n`;
         break;
+      case "embed":
+        flushList();
+        try {
+          const { headers } = await fetch(block.embed.url);
+          if (headers.get("content-type")?.includes("image")) {
+            html += `<img src="${block.embed.url}" alt="Image"/>\n`;
+          }
+        } catch (err: unknown) {
+          throw err;
+        }
+        break;
+      case "column_list":
+        flushList();
+        html += `<div class="column-list">\n`;
+        if (!notionClient) {
+          break;
+        }
+
+        const columnBlocks = await getBlocks(block.id, notionClient);
+
+        for (const column of columnBlocks) {
+          if (column.type === "column") {
+            const columnChildren = await getBlocks(column.id, notionClient);
+            const columnContent = await blocksToHTML(columnChildren);
+            html += `<div class="column">\n${columnContent}\n</div>\n`;
+          }
+        }
+
+        html += `</div>\n`;
+        break;
       default:
         flushList();
         html += `<div>Unsupported block: ${block.type}</div>\n`;
@@ -95,7 +128,6 @@ const blocksToHTML = (blocks: BlockObjectResponse[]): string => {
   }
 
   flushList(); // In case the last blocks are list items
-
   return html.trim();
 };
 
@@ -143,7 +175,7 @@ const notionPageToHTML = async (
   notionClient: Client,
 ): Promise<string | null> => {
   const blocks = await getBlocks(pageId, notionClient);
-  return blocksToHTML(blocks);
+  return await blocksToHTML(blocks, notionClient);
 };
 
 export default notionPageToHTML;

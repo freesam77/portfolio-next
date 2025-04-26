@@ -4,13 +4,12 @@ import type { LandingPageData } from "../types";
 const About = ({ data }: { data: LandingPageData }) => {
   if (data) {
     return (
-      <>
-        <p
-          dangerouslySetInnerHTML={{
-            __html: data,
-          }}
-        />
-      </>
+      <section
+      className="about-section"
+        dangerouslySetInnerHTML={{
+          __html: data,
+        }}
+      />
     );
   }
 

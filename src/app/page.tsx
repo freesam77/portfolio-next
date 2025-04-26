@@ -50,7 +50,8 @@ export default function Home() {
           <main className="pt-[100px] md:pt-0 mx-auto w-[80%] max-w-[950px]">
             <div
               id="about"
-              className="flex flex-col justify-center min-h-screen mb-[100px] whitespace-pre-line"
+              className="flex flex-col justify-center min-h-screen mb-[100px]
+"
             >
               {data.landingPage && <About data={data.landingPage} />}
             </div>

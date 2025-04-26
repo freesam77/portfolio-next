@@ -1,10 +1,15 @@
 import client from "@/app/lib/redis";
 import FetchNotion from "@/app/lib/notionFetch";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const url = new URL(req.url);
+    const writeRedis = url.searchParams.get("write-redis") === "true";
     const result = await FetchNotion();
-    await client.set("portfolioData", JSON.stringify(result));
+
+    if (writeRedis) {
+      await client.set("portfolioData", JSON.stringify(result));
+    }
     return Response.json(result, { status: 200 });
   } catch (error) {
     return Response.json(

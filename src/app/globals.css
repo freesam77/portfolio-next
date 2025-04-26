@@ -20,7 +20,7 @@ body {
     ul,
     ol,
     menu {
-        @apply [list-style-type:unset] ml-6
+        @apply [list-style-type:unset] ml-6;
     }
 
     h1,
@@ -76,6 +76,9 @@ body {
 
     .nav-link-active {
         @apply [text-shadow:_0_0_17px] text-sky-300;
+    }
+    .about-section *{
+        @apply my-4
     }
 }
 
