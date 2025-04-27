@@ -71,7 +71,10 @@ const NavigationBar = () => {
   );
 
   useEffect(() => {
-    scrollToID();
+    setTimeout(() => {
+      scrollToID();
+    }, 480);
+
     window.addEventListener("scroll", setActiveOnScroll);
     return () => window.removeEventListener("scroll", setActiveOnScroll);
   }, []);
