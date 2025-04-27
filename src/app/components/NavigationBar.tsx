@@ -5,6 +5,17 @@ import { Menu, Close } from "@mui/icons-material";
 
 const sections = ["About", "Skillset", "Projects", "Contact", "Resume"];
 
+const scrollLogic = (id: string) => {
+  const targetElement = document.getElementById(id);
+  if (targetElement) {
+    const targetPosition = targetElement.offsetTop - 100;
+    window.scrollTo({
+      top: targetPosition,
+      behavior: "smooth",
+    });
+  }
+};
+
 const NavigationBar = () => {
   const [activeSection, setActiveSection] = useState(sections[0]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,8 +28,7 @@ const NavigationBar = () => {
       if (section === "Resume") return; // Skip tracking Resume
       const element = document.getElementById(section.toLowerCase());
       if (element) {
-        const offsetTop = element.offsetTop;
-        const offsetHeight = element.offsetHeight;
+        const { offsetTop, offsetHeight } = element;
 
         // Handle the last tracked section (Contact)
         if (section === "Contact") {
@@ -39,29 +49,14 @@ const NavigationBar = () => {
     const hash = window.location.hash;
     if (hash) {
       const id = hash.replace("#", "");
-      const targetElement = document.getElementById(id);
-      if (targetElement) {
-        const targetPosition = targetElement.offsetTop - 100;
-        window.scrollTo({
-          top: targetPosition,
-          behavior: "smooth",
-        });
-      }
+      scrollLogic(id);
     }
   }, []);
 
   const navOnClick = useCallback(
     (event: React.MouseEvent<HTMLElement>, section: string) => {
       event.preventDefault();
-
-      const targetElement = document.getElementById(section.toLowerCase());
-      if (targetElement) {
-        const targetPosition = targetElement.offsetTop - 100;
-        window.scrollTo({
-          top: targetPosition,
-          behavior: "smooth",
-        });
-      }
+      scrollLogic(section.toLowerCase());
 
       if (section.toLowerCase() === sections[0].toLowerCase()) {
         window.history.replaceState(null, "", window.location.pathname);
