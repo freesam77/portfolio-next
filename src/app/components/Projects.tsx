@@ -51,7 +51,7 @@ const ProjectSection = ({ data }: { data: ProjectData }) => {
 
         {projectDetails()}
         {data.url && (
-          <a href={data.url} className="flex justify-end md:justify-start">
+          <a href={data.url} className="flex justify-end md:justify-start" target="_blank">
             <LinkRounded />
             <p className="md:hidden ml-1 italic">Link to Project</p>
           </a>
