@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { Menu, Close } from "@mui/icons-material";
 
@@ -9,37 +9,33 @@ const NavigationBar = () => {
   const [activeSection, setActiveSection] = useState(sections[0]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
+  // Callback functions
+  const scrollHandler = useCallback(() => {
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
 
-      sections.forEach((section) => {
-        if (section === "Resume") return; // Skip tracking Resume
-        const element = document.getElementById(section.toLowerCase());
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
+    sections.forEach((section) => {
+      if (section === "Resume") return; // Skip tracking Resume
+      const element = document.getElementById(section.toLowerCase());
+      if (element) {
+        const offsetTop = element.offsetTop;
+        const offsetHeight = element.offsetHeight;
 
-          // Handle the last tracked section (Contact)
-          if (section === "Contact") {
-            if (scrollPosition >= offsetTop * 0.8) {
-              setActiveSection(section);
-            }
-          } else if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
+        // Handle the last tracked section (Contact)
+        if (section === "Contact") {
+          if (scrollPosition >= offsetTop * 0.8) {
             setActiveSection(section);
           }
+        } else if (
+          scrollPosition >= offsetTop &&
+          scrollPosition < offsetTop + offsetHeight
+        ) {
+          setActiveSection(section);
         }
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+      }
+    });
   }, []);
 
-  useEffect(() => {
+  const scrollToHash = useCallback(() => {
     const hash = window.location.hash;
     if (hash) {
       const id = hash.replace("#", "");
@@ -54,30 +50,36 @@ const NavigationBar = () => {
     }
   }, []);
 
-  const handleAnchorClick = (
-    event: React.MouseEvent<HTMLElement>,
-    section: string,
-  ) => {
-    event.preventDefault();
+  const navOnClick = useCallback(
+    (event: React.MouseEvent<HTMLElement>, section: string) => {
+      event.preventDefault();
 
-    const targetElement = document.getElementById(section.toLowerCase());
-    if (targetElement) {
-      const targetPosition = targetElement.offsetTop - 100;
-      window.scrollTo({
-        top: targetPosition,
-        behavior: "smooth",
-      });
-    }
+      const targetElement = document.getElementById(section.toLowerCase());
+      if (targetElement) {
+        const targetPosition = targetElement.offsetTop - 100;
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+      }
 
-    if (section.toLowerCase() === sections[0].toLowerCase()) {
-      window.history.replaceState(null, "", window.location.pathname);
-    } else {
-      window.history.pushState(null, "", `#${section.toLowerCase()}`);
-    }
+      if (section.toLowerCase() === sections[0].toLowerCase()) {
+        window.history.replaceState(null, "", window.location.pathname);
+      } else {
+        window.history.pushState(null, "", `#${section.toLowerCase()}`);
+      }
 
-    // Close menu after click on mobile
-    setIsMenuOpen(false);
-  };
+      // Close menu after click on mobile
+      setIsMenuOpen(false);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    scrollToHash();
+    window.addEventListener("scroll", scrollHandler);
+    return () => window.removeEventListener("scroll", scrollHandler);
+  }, []);
 
   return (
     <nav
@@ -86,7 +88,7 @@ const NavigationBar = () => {
       <div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
         <div className="md:flex items-center">
           <span
-            onClick={(e) => handleAnchorClick(e, sections[0])}
+            onClick={(e) => navOnClick(e, sections[0])}
             className="flex items-center justify-center cursor-pointer"
           >
             <img
@@ -132,9 +134,7 @@ const NavigationBar = () => {
               >
                 <span
                   id={id}
-                  onClick={
-                    isResume ? undefined : (e) => handleAnchorClick(e, section)
-                  }
+                  onClick={isResume ? undefined : (e) => navOnClick(e, section)}
                   className={`${
                     isActive && "active-link"
                   } ${isResume && "border-l-2 pl-4 block"}`}
@@ -184,9 +184,7 @@ const NavigationBar = () => {
               <span
                 id={id}
                 key={section.toLowerCase()}
-                onClick={
-                  isResume ? undefined : (e) => handleAnchorClick(e, section)
-                }
+                onClick={isResume ? undefined : (e) => navOnClick(e, section)}
               >
                 <div
                   className={`px-6 py-4 ${isActive && "bg-gradient-to-r from-sky-300/30 to-white/0"}`}
