@@ -57,7 +57,13 @@ export default function Home() {
             </div>
             <div id="skillset" className="min-h-screen mb-[120px]">
               <h1 className="mb-10">Skillset</h1>
-              {data.skillset && <Skillset data={data.skillset} />}
+              {data.skillset && (
+                <Skillset
+                  data={data.skillset.filter(({ categories }) => {
+                    return !categories.includes("Softskills");
+                  })}
+                />
+              )}
             </div>
             <div id="projects" className="min-h-screen mb-[100px]">
               <h1 className="mb-10">Projects</h1>

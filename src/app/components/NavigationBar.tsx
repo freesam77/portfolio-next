@@ -81,7 +81,7 @@ const NavigationBar = () => {
 
   return (
     <nav
-      className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[80%] md:w-[90%] md:max-w-[1100px] md:h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md ${isMenuOpen ? "rounded-t-3xl rounded-b-3xl" : "rounded-full"}`}
+      className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[80%] max-w-[1100px] md:h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md ${isMenuOpen ? "rounded-t-3xl rounded-b-3xl" : "rounded-full"}`}
     >
       <div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
         <div className="md:flex items-center">

@@ -4,19 +4,16 @@ import type { SkillsetData } from "../types";
 
 const Skillset = ({ data }: { data: SkillsetData[] }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [filteredSkills, setFilteredSkills] = useState<SkillsetData[]>([]);
+  const [filteredSkills, setFilteredSkills] = useState<SkillsetData[]>(data);
   const [exitingSkills, setExitingSkills] = useState<string[]>([]);
-  const skillset = data.filter(({ categories }) => {
-    return !categories.includes("Softskills");
-  });
 
   useEffect(() => {
-    if (!skillset) return;
+    if (!data) return;
 
     const newFilteredSkills =
       selectedCategory === "All"
-        ? skillset
-        : skillset.filter(({ categories }) =>
+        ? data
+        : data.filter(({ categories }) =>
             categories.includes(selectedCategory),
           );
 
@@ -34,13 +31,9 @@ const Skillset = ({ data }: { data: SkillsetData[] }) => {
     }, 400);
   }, [selectedCategory]);
 
-  if (!skillset) {
-    return <div>No data for skill grid...</div>;
-  }
-
   const categories: string[] = [
     "All",
-    ...new Set(skillset.flatMap(({ categories }) => categories)),
+    ...new Set(data.flatMap(({ categories }) => categories)),
   ];
 
   return (
