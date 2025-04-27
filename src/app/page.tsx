@@ -7,33 +7,33 @@ import Contact from "./components/Contact";
 import AnimatedBG from "./components/AnimatedBG";
 import PixelatedLoading from "./components/Loading";
 import ErrorComponent from "./components/ErrorComponent";
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { notionReducer, initialState } from "./context/notionReducer";
 
 export default function Home() {
   const [state, dispatch] = useReducer(notionReducer, initialState);
   const { data, loading, error } = state;
 
+  const fetchNotionData = useCallback(async () => {
+    dispatch({ type: "FETCH_START" });
+
+    try {
+      const response = await fetch("/api/notion");
+      const result = await response.json();
+      dispatch({ type: "FETCH_SUCCESS", payload: result });
+    } catch (error: unknown) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+      dispatch({
+        type: "FETCH_ERROR",
+        error: message ?? "Something went wrong",
+      });
+      console.error("Error fetching Notion data:", error);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchNotionData = async () => {
-      dispatch({ type: "FETCH_START" });
-
-      try {
-        const response = await fetch("/api/notion");
-        const result = await response.json();
-        dispatch({ type: "FETCH_SUCCESS", payload: result });
-      } catch (error: unknown) {
-        let message;
-        if (error instanceof Error) message = error.message;
-        else message = String(error);
-        dispatch({
-          type: "FETCH_ERROR",
-          error: message ?? "Something went wrong",
-        });
-        console.error("Error fetching Notion data:", error);
-      }
-    };
-
     fetchNotionData();
   }, []);
 
