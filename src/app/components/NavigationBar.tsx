@@ -21,7 +21,7 @@ const NavigationBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Callback functions
-  const scrollHandler = useCallback(() => {
+  const setActiveOnScroll = useCallback(() => {
     const scrollPosition = window.scrollY + window.innerHeight / 2;
 
     sections.forEach((section) => {
@@ -45,7 +45,7 @@ const NavigationBar = () => {
     });
   }, []);
 
-  const scrollToHash = useCallback(() => {
+  const scrollToID = useCallback(() => {
     const hash = window.location.hash;
     if (hash) {
       const id = hash.replace("#", "");
@@ -71,9 +71,9 @@ const NavigationBar = () => {
   );
 
   useEffect(() => {
-    scrollToHash();
-    window.addEventListener("scroll", scrollHandler);
-    return () => window.removeEventListener("scroll", scrollHandler);
+    scrollToID();
+    window.addEventListener("scroll", setActiveOnScroll);
+    return () => window.removeEventListener("scroll", setActiveOnScroll);
   }, []);
 
   return (
