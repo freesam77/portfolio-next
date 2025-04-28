@@ -36,20 +36,23 @@ const databaseFetch = async (
   pageContentAsDescription: boolean = false,
 ) => {
   const response = await notion.databases.query({ database_id });
-  const result = response.results.map((item) => {
-    if (isPageObjectResponse(item)) {
-      const processedData = notionDatabaseProcessor(item.properties);
+
+  const result = await Promise.all(
+    response.results.map(async (objectResponse) => {
+      if (!isPageObjectResponse(objectResponse)) {
+        throw new Error("Response type is not page object");
+      }
+      const processedData = notionDatabaseProcessor(objectResponse.properties);
       if (pageContentAsDescription) {
-        notionPageToHTML(item.id, notion).then((description) => {
-          Object.assign(processedData, {
-            description,
-          });
+        const description = await notionPageToHTML(objectResponse.id, notion);
+        Object.assign(processedData, {
+          description,
         });
       }
       return processedData;
-    }
-    return {};
-  });
+    }),
+  );
+
   return { [sectionName]: result };
 };
 
