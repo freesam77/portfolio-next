@@ -89,11 +89,13 @@ body {
         0% {
             opacity: 0;
             transform: perspective(400px) rotateY(90deg) scale(1);
+            transform-origin: left;
         }
 
         100% {
             opacity: 1;
             transform: perspective(400px) rotateY(0deg) scale(1);
+            transform-origin: left;
         }
     }
 
@@ -101,20 +103,23 @@ body {
         0% {
             opacity: 1;
             transform: perspective(400px) rotateY(0deg) scale(1);
+            transform-origin: left;
         }
 
         100% {
             opacity: 0;
             transform: perspective(400px) rotateY(90deg) scale(1);
+            transform-origin: left;
         }
     }
 
     .animate-fade-in {
-        animation: fade-in 0.9s ease-out forwards;
+        animation: fade-in 0.6s ease-out forwards;
+        transform-origin: left;
     }
 
     .animate-fade-out {
         animation: fade-out 0.4s ease-in forwards;
+        transform-origin: left;
     }
-
 }
