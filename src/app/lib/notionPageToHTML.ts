@@ -120,6 +120,9 @@ const blocksToHTML = async (
 
         html += `</div>\n`;
         break;
+      case "child_page":
+      case "child_database":
+        break;
       default:
         flushList();
         html += `<div>Unsupported block: ${block.type}</div>\n`;
