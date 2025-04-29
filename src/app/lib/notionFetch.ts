@@ -59,6 +59,7 @@ const databaseFetch = async (
 const FetchNotion = async () => {
   const sections = await Promise.all([
     pageFetch(process.env.NOTION_LANDING_PAGE_DB!, "landingPage"),
+    databaseFetch(process.env.NOTION_LIKES_DB!, "likes"),
     databaseFetch(process.env.NOTION_PROJECTS_DB!, "projects", true),
     databaseFetch(process.env.NOTION_SKILLSET_DB!, "skillset"),
     databaseFetch(process.env.NOTION_ONLINE_PRESENCE_DB!, "contact"),

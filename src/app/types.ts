@@ -28,6 +28,7 @@ export interface ContactData {
 
 export type NotionDataType = {
   landingPage?: LandingPageData;
+  likes?: LikeItem[];
   skillset?: SkillsetData[];
   projects?: ProjectData[];
   contact?: ContactData[];
@@ -37,3 +38,8 @@ export type NotionContextType = {
   data: NotionDataType | null;
   loading: boolean;
 };
+
+export interface LikeItem {
+  tagline: string;
+  likes: string;
+}

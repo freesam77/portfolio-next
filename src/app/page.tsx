@@ -9,6 +9,7 @@ import PixelatedLoading from "./components/Loading";
 import ErrorComponent from "./components/ErrorComponent";
 import { useCallback, useEffect, useReducer } from "react";
 import { notionReducer, initialState } from "./context/notionReducer";
+import Likes from "./components/Likes";
 
 export default function Home() {
   const [state, dispatch] = useReducer(notionReducer, initialState);
@@ -54,6 +55,7 @@ export default function Home() {
 "
             >
               {data.landingPage && <About data={data.landingPage} />}
+              {data.likes && <Likes data={data.likes} delay={4000} />}
             </div>
             <div id="skillset" className="min-h-screen mb-[120px]">
               <h1 className="mb-10">Skillset</h1>
