@@ -18,6 +18,7 @@ export interface SkillsetData {
   categories: string[];
   skill: string;
   src: string;
+  hidden: boolean;
 }
 
 export interface ContactData {

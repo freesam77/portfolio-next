@@ -61,8 +61,8 @@ export default function Home() {
               <h1 className="mb-10">Skillset</h1>
               {data.skillset && (
                 <Skillset
-                  data={data.skillset.filter(({ categories }) => {
-                    return !categories.includes("Softskills");
+                  data={data.skillset.filter(({ categories, hidden }) => {
+                    return !hidden && !categories.includes("Softskills");
                   })}
                 />
               )}
