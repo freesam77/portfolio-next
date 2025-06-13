@@ -14,8 +14,8 @@ export interface ProjectData {
 }
 
 export interface SkillsetData {
-  name: string;
-  category: string;
+  skill: string;
+  categories: string[];
   description: string;
   icon: string;
   hidden: boolean;

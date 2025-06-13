@@ -93,7 +93,7 @@ const Likes: React.FC<TerminalProps> = ({ data, delay = 3000 }) => {
   }
 
   return (
-    <div className="font-mono bg-gray-900 text-gray-100 p-5 rounded-lg max-w-2xl w-[90%] h-[150px]">
+    <div className="font-mono bg-gray-900/60 text-gray-100 p-5 rounded-lg max-w-2xl w-[90%] h-[150px] backdrop-blur">
       <div className="text-cyan-400 text-lg mb-2">
         {displayText.title}
         {activeLine === "title" && (
