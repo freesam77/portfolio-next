@@ -1,31 +1,74 @@
-# Portfolio Site
+# Samuel's Portfolio ✨
 
-## **Environment Variables**
+Welcome to my portfolio! This is where I showcase my work, skills, and projects. I've built this using modern web technologies and Notion as my CMS, making it easy to keep my content fresh and up-to-date.
 
-Create a `.env` file in the root directory and include the following variables:
+## 🌟 What's Inside?
+
+- **Dynamic Content with Notion**: All my content is managed through Notion databases, making updates a breeze
+- **Smooth Experience**: Each section loads independently with its own loading state
+- **Pixel Perfect**: A beautiful, responsive design that works everywhere
+- **Lightning Fast**: Redis-powered caching for snappy content delivery
+- **Modern Animations**: Smooth transitions and interactive elements
+
+## 🛠️ Tech Stack
+
+### Frontend
+| Tech | Description |
+|------|-------------|
+| [Next.js](https://nextjs.org/) | React framework for production-grade applications |
+| [TypeScript](https://www.typescriptlang.org/) | Static type checking for JavaScript |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework |
+| [Material-UI](https://mui.com/) | React component library implementing Material Design |
+| [Framer Motion](https://www.framer.com/motion/) | Production-ready motion library for React |
+
+### Backend
+| Tech | Description |
+|------|-------------|
+| [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | Serverless API endpoints with Next.js |
+| [Notion API](https://developers.notion.com/) | Content management and database integration |
+| [Redis](https://redis.io/) | In-memory data structure store for caching |
+| [Netlify](https://www.netlify.com/) | Cloud platform for static site deployment |
+
+### Development
+| Tech | Description |
+|------|-------------|
+| [Turbopack](https://turbo.build/pack) | Incremental bundler optimized for JavaScript and TypeScript |
+| [ESLint](https://eslint.org/) | Static code analysis tool |
+| [Prettier](https://prettier.io/) | Code formatter for consistent style |
+| [TypeScript](https://www.typescriptlang.org/) | Static type checking for JavaScript |
+
+## 🔧 Getting Started
+
+Want to run this locally? Here's what you need:
+
+1. Clone the repo
+2. Create a `.env` file with:
+   ```
+   NOTION_API_KEY=your-notion-api-key
+   NOTION_SKILLSET_DB=your-skillset-database-id
+   NOTION_LANDING_PAGE_DB=your-database-id
+   NOTION_PROJECTS_DB=your-projects-database-id
+   REDIS_URL=redis-db-url
+   ```
+3. Run `yarn install`
+4. Start the dev server with `yarn dev`
+5. Visit [http://localhost:3000](http://localhost:3000)
+
+Alternatively, you can visit the live site at [samuelrazali.netlify.app](https://samuelrazali.netlify.app/)
+
+## 📦 Project Structure
 
 ```
-NOTION_API_KEY=your-notion-api-key
-NOTION_SKILLSET_DB=your-skillset-database-id
-NOTION_LANDING_PAGE_DB=your-database-id
-NOTION_PROJECTS_DB=your-projects-database-id
-REDIS_URL=redis-db-url
+src/
+├── app/                 # Next.js app directory
+│   ├── api/            # API routes
+│   ├── components/     # React components
+│   ├── lib/           # Utility functions
+│   └── hooks/         # Custom React hooks
+├── public/            # Static assets
+└── styles/           # Global styles
 ```
 
-These variables are required for backend functionality and integration with Notion APIs.
+## 🚀 Deployment
 
-## **Running the Application Locally**
-
-1. Install dependencies:
-   ```bash
-   yarn install
-   ```
-2. Start the development server:
-   ```bash
-   yarn start
-   ```
-   This runs the app in development mode at [http://localhost:8888](http://localhost:8888) using Netlify Dev behind the scenes. No need to install Netlify CLI globally, as it is included as a development dependency in the project.
-
-## **Additional Notes**
-
-Netlify Dev is automatically used by the `yarn start` command to simulate the production environment locally, including serverless functions and environment variables defined in your Netlify configuration. Use this to test backend APIs or integrations that rely on Netlify features before deploying.
+This site lives on Netlify, with automatic deployments from the main branch. Netlify Dev helps me test everything locally before it goes live.
