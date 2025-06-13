@@ -1,5 +1,19 @@
 import client from "@/app/lib/redis";
-import FetchNotion from "@/app/lib/notionFetch";
+import {
+  fetchLandingPage,
+  fetchLikes,
+  fetchProjects,
+  fetchSkillset,
+  fetchContact,
+} from "@/app/lib/notionFetch";
+
+const sectionHandlers = {
+  landingPage: fetchLandingPage,
+  likes: fetchLikes,
+  projects: fetchProjects,
+  skillset: fetchSkillset,
+  contact: fetchContact,
+};
 
 export async function POST(req: Request) {
   try {
@@ -24,8 +38,27 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid workspace ID" }, { status: 403 });
     }
 
-    const result = await FetchNotion();
-    await client.set("portfolioData", JSON.stringify(result));
+    // Determine which section was updated based on the payload
+    const databaseId = payload.database_id;
+    let sectionToUpdate: keyof typeof sectionHandlers | null = null;
+
+    if (databaseId === process.env.NOTION_LANDING_PAGE_DB) {
+      sectionToUpdate = "landingPage";
+    } else if (databaseId === process.env.NOTION_LIKES_DB) {
+      sectionToUpdate = "likes";
+    } else if (databaseId === process.env.NOTION_PROJECTS_DB) {
+      sectionToUpdate = "projects";
+    } else if (databaseId === process.env.NOTION_SKILLSET_DB) {
+      sectionToUpdate = "skillset";
+    } else if (databaseId === process.env.NOTION_ONLINE_PRESENCE_DB) {
+      sectionToUpdate = "contact";
+    }
+
+    if (sectionToUpdate) {
+      const handler = sectionHandlers[sectionToUpdate];
+      const result = await handler();
+      await client.set(`portfolioData_${sectionToUpdate}`, JSON.stringify(result));
+    }
 
     return Response.json({ success: true });
   } catch (error) {

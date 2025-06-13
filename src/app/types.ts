@@ -14,10 +14,10 @@ export interface ProjectData {
 }
 
 export interface SkillsetData {
-  mastery: number;
-  categories: string[];
-  skill: string;
-  src: string;
+  name: string;
+  category: string;
+  description: string;
+  icon: string;
   hidden: boolean;
 }
 
