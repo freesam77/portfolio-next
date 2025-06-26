@@ -1,42 +1,36 @@
 "use client";
-import { useEffect, useState } from "react";
-import type { LandingPageData } from "../types";
+import { useEffect, useReducer } from "react";
 import SectionLoading from "./SectionLoading";
 import ErrorComponent from "./ErrorComponent";
+import { notionReducer, initialState } from "../context/notionReducer";
 
 const About = () => {
-    const [data, setData] = useState<LandingPageData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [state, dispatch] = useReducer(notionReducer, initialState);
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
-            setError(null);
+            dispatch({ type: "FETCH_START" });
             try {
                 const response = await fetch("/api/notion/landingPage");
                 if (!response.ok) throw new Error("Failed to fetch landing page data");
                 const result = await response.json();
-                setData(result.landingPage ?? null);
+                dispatch({ type: "FETCH_SUCCESS", payload: { landingPage: result.landingPage } });
             } catch (err: unknown) {
-                if (err instanceof Error) setError(err.message);
-                else setError("Unknown error");
-            } finally {
-                setLoading(false);
+                if (err instanceof Error) dispatch({ type: "FETCH_ERROR", error: err.message });
+                else dispatch({ type: "FETCH_ERROR", error: "Unknown error" });
             }
         };
         fetchData();
     }, []);
 
-    if (loading) return <SectionLoading />;
-    if (error) return <ErrorComponent error={error} />;
-    if (!data) return <h1>Landing Page not found</h1>;
-
+    if (state.loading) return <SectionLoading />;
+    if (state.error) return <ErrorComponent error={state.error} />;
+    if (!state.data?.landingPage) return <h1>Landing Page not found</h1>;
     return (
         <section
             className="about-section"
             dangerouslySetInnerHTML={{
-                __html: data,
+                __html: state.data.landingPage,
             }}
         />
     );

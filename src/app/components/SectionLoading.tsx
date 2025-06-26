@@ -1,40 +1,69 @@
-import { styled } from '@mui/material/styles';
-import { keyframes } from '@mui/system';
+import React from "react";
 
-const shimmer = keyframes`
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+const styleSheet = `
+@keyframes section-flash {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
 `;
 
-const LoadingContainer = styled('div')`
-  width: 100%;
-  height: 2px;
-  background: #f0f0f0;
-  overflow: hidden;
-  position: relative;
-`;
-
-const LoadingBar = styled('div')`
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 0%,
-    #e0e0e0 50%,
-    #f0f0f0 100%
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.5s infinite linear;
-`;
+function getRandomWidths(count: number) {
+  return Array.from({ length: count }, () => {
+    const min = 40;
+    const max = 90;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  });
+}
 
 export default function SectionLoading() {
+  React.useEffect(() => {
+    // Inject the keyframes style if not already present
+    if (!document.getElementById("section-flash-keyframes")) {
+      const style = document.createElement("style");
+      style.id = "section-flash-keyframes";
+      style.innerHTML = styleSheet;
+      document.head.appendChild(style);
+    }
+  }, []);
+
+  // Only generate widths on the client
+  const [widths, setWidths] = React.useState<number[] | null>(null);
+
+  React.useEffect(() => {
+    setWidths(getRandomWidths(Math.floor(Math.random() * 4) + 3));
+  }, []);
+
+  if (!widths) {
+    // Render a single bar as fallback until client-side effect runs
+    return <div style={{ width: "100%", height: 24, background: "#e0e0e0", borderRadius: 8, margin: 8, opacity: 0.7 }} />;
+  }
+
   return (
-    <LoadingContainer>
-      <LoadingBar />
-    </LoadingContainer>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 16,
+      }}
+    >
+      {widths.map((w, i) => (
+        <div
+          key={i}
+          style={{
+            width: `${w}%`,
+            height: 24,
+            background: "#e0e0e0",
+            borderRadius: 8,
+            margin: 8,
+            animation: "section-flash 1s infinite alternate",
+            opacity: 0.7,
+          }}
+        />
+      ))}
+    </div>
   );
 } 

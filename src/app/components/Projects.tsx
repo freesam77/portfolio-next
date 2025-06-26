@@ -1,10 +1,11 @@
 "use client";
 import { LinkRounded } from "@mui/icons-material";
 import Modal from "./Modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import type { ProjectData } from "../types";
 import SectionLoading from "./SectionLoading";
 import ErrorComponent from "./ErrorComponent";
+import { notionReducer, initialState } from "../context/notionReducer";
 
 const ProjectSection = ({ data }: { data: ProjectData }) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -75,33 +76,28 @@ const ProjectSection = ({ data }: { data: ProjectData }) => {
 };
 
 const Projects = () => {
-    const [data, setData] = useState<ProjectData[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [state, dispatch] = useReducer(notionReducer, initialState);
 
     useEffect(() => {
+        dispatch({ type: "FETCH_START" });
         const fetchData = async () => {
-            setLoading(true);
-            setError(null);
             try {
                 const response = await fetch("/api/notion/projects");
                 if (!response.ok) throw new Error("Failed to fetch projects data");
                 const result = await response.json();
-                setData(result.projects ?? []);
+                dispatch({ type: "FETCH_SUCCESS", payload: { projects: result.projects } });
             } catch (err: unknown) {
-                if (err instanceof Error) setError(err.message);
-                else setError("Unknown error");
-            } finally {
-                setLoading(false);
+                if (err instanceof Error) dispatch({ type: "FETCH_ERROR", error: err.message });
+                else dispatch({ type: "FETCH_ERROR", error: "Unknown error" });
             }
         };
         fetchData();
     }, []);
 
-    if (loading) return <SectionLoading />;
-    if (error) return <ErrorComponent error={error} />;
+    if (state.loading) return <SectionLoading />;
+    if (state.error) return <ErrorComponent error={state.error} />;
 
-    const sortedProjects = [...data].sort((a, b) => a.order - b.order);
+    const sortedProjects = [...(state.data?.projects ?? [])].sort((a, b) => a.order - b.order);
 
     return (
         <div>

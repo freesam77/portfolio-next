@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { LikeItem } from "../types";
+import React, { useEffect, useReducer, useRef, useMemo } from "react";
+import { notionReducer, initialState } from "../context/notionReducer";
 import SectionLoading from "./SectionLoading";
 import ErrorComponent from "./ErrorComponent";
 
@@ -10,29 +10,24 @@ interface LikesProps {
 }
 
 const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
-  const [data, setData] = useState<LikeItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayText, setDisplayText] = useState({ title: "", tagline: "" });
-  const [showCursor, setShowCursor] = useState(true);
-  const [activeLine, setActiveLine] = useState<"title" | "tagline">("title");
+  const [state, dispatch] = useReducer(notionReducer, initialState);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [displayText, setDisplayText] = React.useState({ title: "", tagline: "" });
+  const [showCursor, setShowCursor] = React.useState(true);
+  const [activeLine, setActiveLine] = React.useState<"title" | "tagline">("title");
   const timeoutRef = useRef<NodeJS.Timeout>(null);
 
   useEffect(() => {
+    dispatch({ type: "FETCH_START" });
     const fetchData = async () => {
-      setLoading(true);
-      setError(null);
       try {
         const response = await fetch("/api/notion/likes");
         if (!response.ok) throw new Error("Failed to fetch likes data");
         const result = await response.json();
-        setData(result.likes ?? []);
+        dispatch({ type: "FETCH_SUCCESS", payload: { likes: result.likes } });
       } catch (err: unknown) {
-        if (err instanceof Error) setError(err.message);
-        else setError("Unknown error");
-      } finally {
-        setLoading(false);
+        if (err instanceof Error) dispatch({ type: "FETCH_ERROR", error: err.message });
+        else dispatch({ type: "FETCH_ERROR", error: "Unknown error" });
       }
     };
     fetchData();
@@ -40,8 +35,8 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
 
   // Filter out empty items
   const items = useMemo(
-    () => data.filter((item) => item.likes.trim() !== ""),
-    [data],
+    () => (state.data?.likes ?? []).filter((item) => item.likes.trim() !== ""),
+    [state.data],
   );
 
   useEffect(() => {
@@ -111,8 +106,8 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
     return () => clearInterval(interval);
   }, []);
 
-  if (loading) return <SectionLoading />;
-  if (error) return <ErrorComponent error={error} />;
+  if (state.loading) return <SectionLoading />;
+  if (state.error) return <ErrorComponent error={state.error} />;
   if (items.length === 0) {
     return <div>No data available</div>;
   }

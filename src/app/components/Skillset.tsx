@@ -1,34 +1,31 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
-import type { SkillsetData } from "../types";
+import { useEffect, useReducer, useMemo, useState } from "react";
 import SectionLoading from "./SectionLoading";
 import ErrorComponent from "./ErrorComponent";
+import { notionReducer, initialState } from "../context/notionReducer";
 
 const Skillset = () => {
-    const [data, setData] = useState<SkillsetData[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [state, dispatch] = useReducer(notionReducer, initialState);
     const [selectedCategory, setSelectedCategory] = useState<string>("All");
     const [exitingSkills, setExitingSkills] = useState<string[]>([]);
 
     useEffect(() => {
+        dispatch({ type: "FETCH_START" });
         const fetchData = async () => {
-            setLoading(true);
-            setError(null);
             try {
                 const response = await fetch("/api/notion/skillset");
                 if (!response.ok) throw new Error("Failed to fetch skillset data");
                 const result = await response.json();
-                setData(result.skillset ?? []);
+                dispatch({ type: "FETCH_SUCCESS", payload: { skillset: result.skillset } });
             } catch (err: unknown) {
-                if (err instanceof Error) setError(err.message);
-                else setError("Unknown error");
-            } finally {
-                setLoading(false);
+                if (err instanceof Error) dispatch({ type: "FETCH_ERROR", error: err.message });
+                else dispatch({ type: "FETCH_ERROR", error: "Unknown error" });
             }
         };
         fetchData();
     }, []);
+
+    const data = state.data?.skillset ?? [];
 
     // Build unique category list, excluding "Softskills"
     const categories: string[] = useMemo(() => {
@@ -57,7 +54,11 @@ const Skillset = () => {
             )
             .map((s) => s.skill);
 
-        setExitingSkills(exiting);
+        // Only update if different
+        setExitingSkills(prev => {
+            const isSame = prev.length === exiting.length && prev.every((v, i) => v === exiting[i]);
+            return isSame ? prev : exiting;
+        });
 
         // Delay removing skills from the grid to allow animation to play
         const timeout = setTimeout(() => {
@@ -66,8 +67,8 @@ const Skillset = () => {
         return () => clearTimeout(timeout);
     }, [data, filteredSkills]);
 
-    if (loading) return <SectionLoading />;
-    if (error) return <ErrorComponent error={error} />;
+    if (state.loading) return <SectionLoading />;
+    if (state.error) return <ErrorComponent error={state.error} />;
 
     return (
         <div>
