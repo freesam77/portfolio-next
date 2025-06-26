@@ -2,18 +2,41 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { LikeItem } from "../types";
+import SectionLoading from "./SectionLoading";
+import ErrorComponent from "./ErrorComponent";
 
-interface TerminalProps {
-  data: LikeItem[];
+interface LikesProps {
   delay?: number;
 }
 
-const Likes: React.FC<TerminalProps> = ({ data, delay = 3000 }) => {
+const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
+  const [data, setData] = useState<LikeItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [displayText, setDisplayText] = useState({ title: "", tagline: "" });
   const [showCursor, setShowCursor] = useState(true);
   const [activeLine, setActiveLine] = useState<"title" | "tagline">("title");
   const timeoutRef = useRef<NodeJS.Timeout>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("/api/notion/likes");
+        if (!response.ok) throw new Error("Failed to fetch likes data");
+        const result = await response.json();
+        setData(result.likes ?? []);
+      } catch (err: unknown) {
+        if (err instanceof Error) setError(err.message);
+        else setError("Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   // Filter out empty items
   const items = useMemo(
@@ -88,6 +111,8 @@ const Likes: React.FC<TerminalProps> = ({ data, delay = 3000 }) => {
     return () => clearInterval(interval);
   }, []);
 
+  if (loading) return <SectionLoading />;
+  if (error) return <ErrorComponent error={error} />;
   if (items.length === 0) {
     return <div>No data available</div>;
   }

@@ -1,94 +1,122 @@
 "use client";
 import { LinkRounded } from "@mui/icons-material";
 import Modal from "./Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ProjectData } from "../types";
+import SectionLoading from "./SectionLoading";
+import ErrorComponent from "./ErrorComponent";
 
 const ProjectSection = ({ data }: { data: ProjectData }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  if (!data) {
-    return <div>There is no project data</div>;
-  }
+    const [modalOpen, setModalOpen] = useState(false);
+    if (!data) {
+        return <div>There is no project data</div>;
+    }
 
-  const projectDetails = () => (
-    <div className="mt-4 md:mt-0">
-      <div className="md:flex justify-between mb-4">
-        <div className="m-auto md:m-0">
-          <h2 className="mx-auto text-center md:text-left">
-            {data.projectName}
-          </h2>
-          <div className="flex flex-wrap mb-4 justify-center md:justify-normal">
-            {data.stack.sort().map((stackItem, index) => (
-              <span
-                className="bg-sky-900 shadow-sm rounded-md px-2 py-1 mr-2 mt-2 md:mt-0 text-xs"
-                key={`${stackItem}-${index}`}
-              >
-                {stackItem}
-              </span>
-            ))}
-          </div>
+    const projectDetails = () => (
+        <div className="mt-4 md:mt-0">
+            <div className="md:flex justify-between mb-4">
+                <div className="m-auto md:m-0">
+                    <h2 className="mx-auto text-center md:text-left">
+                        {data.projectName}
+                    </h2>
+                    <div className="flex flex-wrap mb-4 justify-center md:justify-normal">
+                        {data.stack.sort().map((stackItem, index) => (
+                            <span
+                                className="bg-sky-900 shadow-sm rounded-md px-2 py-1 mr-2 my-2 md:mt-0 text-xs"
+                                key={`${stackItem}-${index}`}
+                            >
+                                {stackItem}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <p
+                className="mb-4"
+                dangerouslySetInnerHTML={{ __html: data.description }}
+            />
         </div>
-      </div>
-      <p
-        className="mb-4"
-        dangerouslySetInnerHTML={{ __html: data.description }}
-      />
-    </div>
-  );
+    );
 
-  return (
-    <div>
-      <div className="card md:flex align-top p-8 md:p-4 mb-4">
-        <img
-          className={`md:mr-8 m-auto md:m-0 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${data.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
-          src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
-          onClick={() => {
-            if (data.mediaUrl) {
-              setModalOpen(true);
-            }
-          }}
-        />
+    return (
+        <div>
+            <div className="card md:flex align-top p-8 md:p-4 mb-4">
+                <img
+                    className={`md:mr-8 m-auto md:m-0 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${data.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
+                    src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
+                    onClick={() => {
+                        if (data.mediaUrl) {
+                            setModalOpen(true);
+                        }
+                    }}
+                />
 
-        {projectDetails()}
-        {data.url && (
-          <a href={data.url} className="flex justify-end md:justify-start" target="_blank">
-            <LinkRounded />
-            <p className="md:hidden ml-1 italic">Link to Project</p>
-          </a>
-        )}
-      </div>
-      <Modal
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-        }}
-      >
-        <img
-          className="rounded-sm mx-auto"
-          src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
-        />
-      </Modal>
-    </div>
-  );
+                {projectDetails()}
+                {data.url && (
+                    <a href={data.url} className="flex justify-end md:justify-start" target="_blank">
+                        <LinkRounded />
+                        <p className="md:hidden ml-1 italic">Link to Project</p>
+                    </a>
+                )}
+            </div>
+            <Modal
+                isOpen={modalOpen}
+                onClose={() => {
+                    setModalOpen(false);
+                }}
+            >
+                <img
+                    className="rounded-sm mx-auto"
+                    src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
+                />
+            </Modal>
+        </div>
+    );
 };
 
-const Projects = ({ data }: { data: ProjectData[] }) => {
-  const sortedProjects = [...data].sort((a, b) => a.order - b.order);
+const Projects = () => {
+    const [data, setData] = useState<ProjectData[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-  return (
-    <div>
-      {sortedProjects.map((project: ProjectData) => {
-        return (
-          !project.hidden && (
-            <ProjectSection
-              data={project}
-              key={`${project.projectName}-${project.order}`}
-            />
-          )
-        );
-      })}
-    </div>
-  );
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await fetch("/api/notion/projects");
+                if (!response.ok) throw new Error("Failed to fetch projects data");
+                const result = await response.json();
+                setData(result.projects ?? []);
+            } catch (err: unknown) {
+                if (err instanceof Error) setError(err.message);
+                else setError("Unknown error");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (loading) return <SectionLoading />;
+    if (error) return <ErrorComponent error={error} />;
+
+    const sortedProjects = [...data].sort((a, b) => a.order - b.order);
+
+    return (
+        <div>
+            {sortedProjects.map((project: ProjectData) => {
+                return (
+                    !project.hidden && (
+                        <ProjectSection
+                            data={project}
+                            key={`${project.projectName}-${project.order}`}
+                        />
+                    )
+                );
+            })}
+        </div>
+    );
 };
 
 export default Projects;

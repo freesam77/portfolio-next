@@ -1,10 +1,34 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import type { SkillsetData } from "../types";
+import SectionLoading from "./SectionLoading";
+import ErrorComponent from "./ErrorComponent";
 
-const Skillset = ({ data }: { data: SkillsetData[] }) => {
+const Skillset = () => {
+    const [data, setData] = useState<SkillsetData[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string>("All");
     const [exitingSkills, setExitingSkills] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await fetch("/api/notion/skillset");
+                if (!response.ok) throw new Error("Failed to fetch skillset data");
+                const result = await response.json();
+                setData(result.skillset ?? []);
+            } catch (err: unknown) {
+                if (err instanceof Error) setError(err.message);
+                else setError("Unknown error");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     // Build unique category list, excluding "Softskills"
     const categories: string[] = useMemo(() => {
@@ -41,6 +65,9 @@ const Skillset = ({ data }: { data: SkillsetData[] }) => {
         }, 400);
         return () => clearTimeout(timeout);
     }, [data, filteredSkills]);
+
+    if (loading) return <SectionLoading />;
+    if (error) return <ErrorComponent error={error} />;
 
     return (
         <div>
