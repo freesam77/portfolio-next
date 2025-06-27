@@ -38,26 +38,12 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid workspace ID" }, { status: 403 });
     }
 
-    // Determine which section was updated based on the payload
-    const databaseId = payload.database_id;
-    let sectionToUpdate: keyof typeof sectionHandlers | null = null;
-
-    if (databaseId === process.env.NOTION_LANDING_PAGE_DB) {
-      sectionToUpdate = "landingPage";
-    } else if (databaseId === process.env.NOTION_LIKES_DB) {
-      sectionToUpdate = "likes";
-    } else if (databaseId === process.env.NOTION_PROJECTS_DB) {
-      sectionToUpdate = "projects";
-    } else if (databaseId === process.env.NOTION_SKILLSET_DB) {
-      sectionToUpdate = "skillset";
-    } else if (databaseId === process.env.NOTION_ONLINE_PRESENCE_DB) {
-      sectionToUpdate = "contact";
-    }
-
-    if (sectionToUpdate) {
-      const handler = sectionHandlers[sectionToUpdate];
+    // Always update all sections on every webhook
+    const allSections = Object.keys(sectionHandlers);
+    for (const section of allSections) {
+      const handler = sectionHandlers[section as keyof typeof sectionHandlers];
       const result = await handler();
-      await client.set(`portfolioData_${sectionToUpdate}`, JSON.stringify(result));
+      await client.set(`portfolioData_${section}`, JSON.stringify(result));
     }
 
     return Response.json({ success: true });
