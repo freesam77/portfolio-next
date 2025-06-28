@@ -3,8 +3,6 @@ import { useState, useEffect, useCallback } from "react";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { Menu, Close } from "@mui/icons-material";
 
-const sections = ["About", "Skillset", "Projects", "Contact", "Resume"];
-
 const scrollLogic = (id: string) => {
   const targetElement = document.getElementById(id);
   if (targetElement) {
@@ -17,14 +15,36 @@ const scrollLogic = (id: string) => {
 };
 
 const NavigationBar = () => {
-  const [activeSection, setActiveSection] = useState(sections[0]);
+  const [baseSections, setBaseSections] = useState(["About", "Skillset", "Projects", "Contact"]);
+  const [activeSection, setActiveSection] = useState("About");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [resumeData, setResumeData] = useState<{ OnlinePresence: string; Links: string } | null>(null);
+
+  // Fetch contact data to check for Resume
+  useEffect(() => {
+    const fetchContactData = async () => {
+      try {
+        const response = await fetch("/api/notion/contact");
+        if (response.ok) {
+          const result = await response.json();
+          const resumeEntry = result.contact?.find((item: { OnlinePresence: string; Links: string }) => item.OnlinePresence === "Resume");
+          if (resumeEntry) {
+            setResumeData(resumeEntry);
+            setBaseSections(prev => [...prev, "Resume"]);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch contact data:", error);
+      }
+    };
+    fetchContactData();
+  }, []);
 
   // Callback functions
   const setActiveOnScroll = useCallback(() => {
     const scrollPosition = window.scrollY + window.innerHeight / 2;
 
-    sections.forEach((section) => {
+    baseSections.forEach((section) => {
       if (section === "Resume") return; // Skip tracking Resume
       const element = document.getElementById(section.toLowerCase());
       if (element) {
@@ -43,7 +63,7 @@ const NavigationBar = () => {
         }
       }
     });
-  }, []);
+  }, [baseSections]);
 
   const scrollToID = useCallback(() => {
     const hash = window.location.hash;
@@ -58,7 +78,7 @@ const NavigationBar = () => {
       event.preventDefault();
       scrollLogic(section.toLowerCase());
 
-      if (section.toLowerCase() === sections[0].toLowerCase()) {
+      if (section.toLowerCase() === baseSections[0].toLowerCase()) {
         window.history.replaceState(null, "", window.location.pathname);
       } else {
         window.history.pushState(null, "", `#${section.toLowerCase()}`);
@@ -86,7 +106,7 @@ const NavigationBar = () => {
       <div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
         <div className="md:flex items-center">
           <span
-            onClick={(e) => navOnClick(e, sections[0])}
+            onClick={(e) => navOnClick(e, baseSections[0])}
             className="flex items-center justify-center cursor-pointer"
           >
             <img
@@ -100,10 +120,10 @@ const NavigationBar = () => {
 
         {/* Navigation Items for Web*/}
         <div className={"hidden md:flex items-center h-[100%] text-lg"}>
-          {sections.map((section) => {
+          {baseSections.map((section) => {
             const isResume = section.toLowerCase() === "resume";
             const id = isResume
-              ? "https://heathered-efraasia-c7f.notion.site/Samuel-Razali-15c6f18f89a580169455e76b99d0ae7d?pvs=4"
+              ? resumeData?.Links || "#"
               : `#${section.trim().toLowerCase()}`;
             const isActive = activeSection === section;
 
@@ -155,25 +175,27 @@ const NavigationBar = () => {
       {/* Navigation Items for Mobile*/}
       {isMenuOpen && (
         <div className={"md:hidden bg-black/60 text-lg rounded-b-3xl z-50"}>
-          {sections.map((section) => {
+          {baseSections.map((section) => {
             const isResume = section.toLowerCase() === "resume";
             const id = isResume
-              ? "https://heathered-efraasia-c7f.notion.site/Samuel-Razali-15c6f18f89a580169455e76b99d0ae7d?pvs=4"
+              ? resumeData?.Links || "#"
               : `#${section.trim().toLowerCase()}`;
             const isActive = activeSection === section;
 
             if (isResume) {
               return (
                 <span key={section.toLowerCase()}>
-                  <div
-                    className={`px-6 py-4 ${isActive && "bg-gradient-to-r from-sky-300/30 to-white/0"}`}
+                  <a
+                    href={id}
+                    target="_blank"
+                    className={`px-6 py-4 block ${isActive && "bg-gradient-to-r from-sky-300/30 to-white/0"}`}
                   >
                     <DescriptionOutlinedIcon
                       fontSize="small"
                       viewBox="8 0 10 30"
                     />
                     Resume
-                  </div>
+                  </a>
                 </span>
               );
             }
@@ -198,4 +220,4 @@ const NavigationBar = () => {
   );
 };
 
-export default NavigationBar;
+export default NavigationBar; 
