@@ -3,7 +3,9 @@
 import type { Client } from "@notionhq/client";
 import {
     BlockObjectResponse,
+    BulletedListItemBlockObjectResponse,
     ListBlockChildrenResponse,
+    NumberedListItemBlockObjectResponse,
     RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
@@ -40,13 +42,42 @@ const blocksToHTML = async (
 ): Promise<string> => {
     let html = "";
     let listBuffer: string[] = [];
-    let currentListType: "ul" | "ol" | null = null;
+    let currentBlockType: "ul" | "ol" | "div" | null = null;
 
     const flushList = () => {
-        if (currentListType && listBuffer.length > 0) {
-            html += `<${currentListType}>\n${listBuffer.join("\n")}\n</${currentListType}>\n`;
+        if (currentBlockType && listBuffer.length > 0) {
+            html += `<${currentBlockType}>\n${listBuffer.join("\n")}\n</${currentBlockType}>\n`;
             listBuffer = [];
-            currentListType = null;
+            currentBlockType = null;
+        }
+    };
+
+    const getNestedListHTML = async (
+        block:
+            | BulletedListItemBlockObjectResponse
+            | NumberedListItemBlockObjectResponse,
+        blockId: string,
+        notionClient?: Client,
+    ): Promise<void> => {
+        let nestedListHtml = "";
+        if (notionClient) {
+            const childBlocks = await getBlocks(blockId, notionClient);
+            if (childBlocks.length > 0) {
+                nestedListHtml = await blocksToHTML(childBlocks, notionClient);
+            }
+        }
+
+        // Type guard using discriminated unions
+        if (block.type === "bulleted_list_item") {
+            listBuffer.push(
+                `<li>${extractRichText(block.bulleted_list_item.rich_text)}${nestedListHtml ? `\n${nestedListHtml}` : ""
+                }</li>`,
+            );
+        } else if (block.type === "numbered_list_item") {
+            listBuffer.push(
+                `<li>${extractRichText(block.numbered_list_item.rich_text)}${nestedListHtml ? `\n${nestedListHtml}` : ""
+                }</li>`,
+            );
         }
     };
 
@@ -68,19 +99,32 @@ const blocksToHTML = async (
                 flushList();
                 html += `<h3>${extractRichText(block.heading_3.rich_text)}</h3>\n`;
                 break;
+            case "callout":
+                flushList();
+                if (notionClient) {
+                    const childBlocks = await getBlocks(block.id, notionClient);
+                    const nestedHtml = await blocksToHTML(childBlocks, notionClient);
+                    html += `<div class="callout">${extractRichText(
+                        block.callout.rich_text,
+                    )}${nestedHtml ? `\n${nestedHtml}` : ""}</div>\n`;
+                }
+                break;
+            case "synced_block":
+                flushList();
+                if (!notionClient) break;
+                const syncedChildren = await getBlocks(block.id, notionClient);
+                const syncedHtml = await blocksToHTML(syncedChildren, notionClient);
+                html += `<div>\n${syncedHtml}\n</div>\n`;
+                break;
             case "bulleted_list_item":
-                if (currentListType !== "ul") flushList();
-                currentListType = "ul";
-                listBuffer.push(
-                    `<li>${extractRichText(block.bulleted_list_item.rich_text)}</li>`,
-                );
+                if (currentBlockType !== "ul") flushList();
+                currentBlockType = "ul";
+                await getNestedListHTML(block, block.id, notionClient);
                 break;
             case "numbered_list_item":
-                if (currentListType !== "ol") flushList();
-                currentListType = "ol";
-                listBuffer.push(
-                    `<li>${extractRichText(block.numbered_list_item.rich_text)}</li>`,
-                );
+                if (currentBlockType !== "ol") flushList();
+                currentBlockType = "ol";
+                await getNestedListHTML(block, block.id, notionClient);
                 break;
             case "image":
                 flushList();

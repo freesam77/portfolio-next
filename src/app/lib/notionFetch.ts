@@ -21,8 +21,8 @@ const isPageObjectResponse = (
     return "properties" in item;
 };
 
-export const pageFetch = async (notionClient: Client, database_id: string, sectionName: string,) => {
-    const result = await notionPageToHTML(notionClient, database_id);
+export const pageFetch = async (notionClient: Client, page_id: string, sectionName: string) => {
+    const result = await notionPageToHTML(notionClient, page_id);
     return { [sectionName]: result };
 };
 
@@ -42,9 +42,7 @@ export const databaseFetch = async (
             const processedData = notionPropertyProcessor(objectResponse.properties);
             if (pageContentAsDescription) {
                 const description = await notionPageToHTML(notionClient, objectResponse.id);
-                Object.assign(processedData, {
-                    description,
-                });
+                processedData.description = description;
             }
             return processedData;
         }),
