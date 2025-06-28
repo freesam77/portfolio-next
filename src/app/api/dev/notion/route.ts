@@ -1,11 +1,11 @@
-import client from "@/app/lib/redis";
-import FetchNotion from "@/app/lib/notionFetch";
+import client from "@/app/lib/redisSetup";
+import SectionFetch from "@/app/lib/sectionFetch";
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const writeRedis = url.searchParams.get("write-redis") === "true";
-    const result = await FetchNotion();
+    const result = await SectionFetch();
 
     if (writeRedis) {
       await client.set("portfolioData", JSON.stringify(result));

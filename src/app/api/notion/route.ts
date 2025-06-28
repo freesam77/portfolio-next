@@ -1,5 +1,5 @@
-import client from "@/app/lib/redis";
-import FetchNotion from "@/app/lib/notionFetch";
+import client from "@/app/lib/redisSetup";
+import SectionFetch from "@/app/lib/sectionFetch";
 
 export async function GET() {
   try {
@@ -7,7 +7,7 @@ export async function GET() {
     if (portfolioData) {
       return Response.json(JSON.parse(portfolioData), { status: 200 });
     }
-    const result = await FetchNotion();
+    const result = await SectionFetch();
     await client.set("portfolioData", JSON.stringify(result));
     return Response.json(result, { status: 200 });
   } catch (error) {

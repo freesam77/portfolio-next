@@ -1,11 +1,11 @@
-import client from "@/app/lib/redis";
+import client from "@/app/lib/redisSetup";
 import {
     fetchLandingPage,
     fetchLikes,
     fetchProjects,
     fetchSkillset,
     fetchContact,
-} from "@/app/lib/notionFetch";
+} from "@/app/lib/sectionFetch";
 import { NextResponse } from "next/server";
 
 const sectionHandlers = {

@@ -1,39 +1,55 @@
-"use server";
+import { Client } from "@notionhq/client";
+import {
+  PageObjectResponse,
+  PartialPageObjectResponse,
+  PartialDatabaseObjectResponse,
+  DatabaseObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 
-import { pageFetch, databaseFetch } from "./notionFetchHelpers";
+import notionPropertyProcessor from "@/app/lib/notionPropertyProcessor";
+import notionPageToHTML from "./notionPageToHTML";
 
-export const fetchLandingPage = async () => {
-  return await pageFetch(process.env.NOTION_LANDING_PAGE_DB!, "landingPage");
+// Initialize Notion client
+const notion = new Client({ auth: process.env.NOTION_API_KEY });
+
+// Type guard
+const isPageObjectResponse = (
+  item:
+    | PageObjectResponse
+    | PartialPageObjectResponse
+    | PartialDatabaseObjectResponse
+    | DatabaseObjectResponse,
+): item is PageObjectResponse => {
+  return "properties" in item;
 };
 
-export const fetchLikes = async () => {
-  return await databaseFetch(process.env.NOTION_LIKES_DB!, "likes");
+export const pageFetch = async (database_id: string, sectionName: string) => {
+  const result = await notionPageToHTML(database_id, notion);
+  return { [sectionName]: result };
 };
 
-export const fetchProjects = async () => {
-  return await databaseFetch(process.env.NOTION_PROJECTS_DB!, "projects", true);
-};
+export const databaseFetch = async (
+  database_id: string,
+  sectionName: string,
+  pageContentAsDescription: boolean = false,
+) => {
+  const response = await notion.databases.query({ database_id });
 
-export const fetchSkillset = async () => {
-  return await databaseFetch(process.env.NOTION_SKILLSET_DB!, "skillset");
-};
+  const result = await Promise.all(
+    response.results.map(async (objectResponse) => {
+      if (!isPageObjectResponse(objectResponse)) {
+        throw new Error("Response type is not page object");
+      }
+      const processedData = notionPropertyProcessor(objectResponse.properties);
+      if (pageContentAsDescription) {
+        const description = await notionPageToHTML(objectResponse.id, notion);
+        Object.assign(processedData, {
+          description,
+        });
+      }
+      return processedData;
+    }),
+  );
 
-export const fetchContact = async () => {
-  return await databaseFetch(process.env.NOTION_ONLINE_PRESENCE_DB!, "contact");
-};
-
-// For backward compatibility and webhook usage
-const FetchNotion = async () => {
-  const sections = await Promise.all([
-    fetchLandingPage(),
-    fetchLikes(),
-    fetchProjects(),
-    fetchSkillset(),
-    fetchContact(),
-  ]);
-
-  const result = Object.assign({}, ...sections);
-  return result;
-};
-
-export default FetchNotion;
+  return { [sectionName]: result };
+}; 

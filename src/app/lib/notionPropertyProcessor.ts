@@ -56,7 +56,7 @@ const propertyValueProcessor = (
   }
 };
 
-const databasePropertyProcessor = (
+const notionPropertyProcessor = (
   databaseProperties: PageObjectResponse["properties"],
 ): ProcessedData => {
   const data: ProcessedData = {};
@@ -68,4 +68,4 @@ const databasePropertyProcessor = (
   return data;
 };
 
-export default databasePropertyProcessor;
+export default notionPropertyProcessor;
