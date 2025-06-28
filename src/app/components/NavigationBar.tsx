@@ -14,31 +14,26 @@ const scrollLogic = (id: string) => {
   }
 };
 
-const NavigationBar = () => {
+interface NavigationBarProps {
+  contactData?: Array<{ OnlinePresence: string; Links: string }>;
+}
+
+const NavigationBar = ({ contactData }: NavigationBarProps) => {
   const [baseSections, setBaseSections] = useState(["About", "Skillset", "Projects", "Contact"]);
   const [activeSection, setActiveSection] = useState("About");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [resumeData, setResumeData] = useState<{ OnlinePresence: string; Links: string } | null>(null);
 
-  // Fetch contact data to check for Resume
+  // Update sections based on contact data
   useEffect(() => {
-    const fetchContactData = async () => {
-      try {
-        const response = await fetch("/api/notion/contact");
-        if (response.ok) {
-          const result = await response.json();
-          const resumeEntry = result.contact?.find((item: { OnlinePresence: string; Links: string }) => item.OnlinePresence === "Resume");
-          if (resumeEntry) {
-            setResumeData(resumeEntry);
-            setBaseSections(prev => [...prev, "Resume"]);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch contact data:", error);
+    if (contactData) {
+      const resumeEntry = contactData.find(item => item.OnlinePresence === "Resume");
+      if (resumeEntry) {
+        setBaseSections(prev => prev.filter(s => s !== "Resume").concat("Resume"));
+      } else {
+        setBaseSections(prev => prev.filter(s => s !== "Resume"));
       }
-    };
-    fetchContactData();
-  }, []);
+    }
+  }, [contactData]);
 
   // Callback functions
   const setActiveOnScroll = useCallback(() => {
@@ -98,6 +93,9 @@ const NavigationBar = () => {
     window.addEventListener("scroll", setActiveOnScroll);
     return () => window.removeEventListener("scroll", setActiveOnScroll);
   }, []);
+
+  // Get resume data from contactData prop
+  const resumeData = contactData?.find(item => item.OnlinePresence === "Resume");
 
   return (
     <nav

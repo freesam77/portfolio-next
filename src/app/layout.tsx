@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Outfit, Funnel_Sans } from "next/font/google";
+import { PortfolioProvider } from "./context/PortfolioContext";
 
 const funnel = Funnel_Sans({
   subsets: ["latin"],
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased ${outfit.variable} ${funnel.variable}`}>
-        {children}
+        <PortfolioProvider>
+          {children}
+        </PortfolioProvider>
       </body>
     </html>
   );

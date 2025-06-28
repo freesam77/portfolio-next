@@ -1,42 +1,24 @@
 "use client";
 
-import React, { useEffect, useReducer, useRef, useMemo } from "react";
-import { notionReducer, initialState } from "../context/notionReducer";
-import SectionLoading from "./SectionLoading";
-import ErrorComponent from "./ErrorComponent";
+import React, { useEffect, useRef, useMemo } from "react";
+import { usePortfolio } from "../context/PortfolioContext";
 
 interface LikesProps {
   delay?: number;
 }
 
 const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
-  const [state, dispatch] = useReducer(notionReducer, initialState);
+  const { data } = usePortfolio();
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [displayText, setDisplayText] = React.useState({ title: "", tagline: "" });
   const [showCursor, setShowCursor] = React.useState(true);
   const [activeLine, setActiveLine] = React.useState<"title" | "tagline">("title");
   const timeoutRef = useRef<NodeJS.Timeout>(null);
 
-  useEffect(() => {
-    dispatch({ type: "FETCH_START" });
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/notion/likes");
-        if (!response.ok) throw new Error("Failed to fetch likes data");
-        const result = await response.json();
-        dispatch({ type: "FETCH_SUCCESS", payload: { likes: result.likes } });
-      } catch (err: unknown) {
-        if (err instanceof Error) dispatch({ type: "FETCH_ERROR", error: err.message });
-        else dispatch({ type: "FETCH_ERROR", error: "Unknown error" });
-      }
-    };
-    fetchData();
-  }, []);
-
   // Filter out empty items
   const items = useMemo(
-    () => (state.data?.likes ?? []).filter((item) => item.likes.trim() !== ""),
-    [state.data],
+    () => (data?.likes ?? []).filter((item) => item.likes.trim() !== ""),
+    [data?.likes],
   );
 
   useEffect(() => {
@@ -70,10 +52,10 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
     };
 
     const typeTagline = () => {
-      if (taglineIndex < currentItem.tagline.length - 1) {
+      if (taglineIndex < (currentItem.tagline?.length ?? 0) - 1) {
         setDisplayText((prev) => ({
           ...prev,
-          tagline: prev.tagline + currentItem.tagline[taglineIndex],
+          tagline: prev.tagline + (currentItem.tagline?.[taglineIndex] ?? ''),
         }));
         taglineIndex++;
         timeoutRef.current = setTimeout(typeTagline, 30 + Math.random() * 50);
@@ -106,8 +88,6 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
     return () => clearInterval(interval);
   }, []);
 
-  if (state.loading) return <SectionLoading />;
-  if (state.error) return <ErrorComponent error={state.error} />;
   if (items.length === 0) {
     return <div>No data available</div>;
   }

@@ -58,10 +58,10 @@ const AnimatedBG: React.FC = () => {
         nodes.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.15,
-          vy: (Math.random() - 0.5) * 0.15,
+          vx: (Math.random() - 0.5) * 0.08,
+          vy: (Math.random() - 0.5) * 0.08,
           radius: 1 + Math.random() * 2.5,
-          flashTimer: Math.random() * 5000,
+          flashTimer: Math.random() * 8000,
         });
       }
     };
@@ -72,7 +72,7 @@ const AnimatedBG: React.FC = () => {
       Math.random() * numNodesRef.current,
     );
     let flashCooldown = 0;
-    nodes.current[currentFlashingNodeIndex].flashTimer = 100;
+    nodes.current[currentFlashingNodeIndex].flashTimer = 200;
 
     const animate = () => {
       if (!ctx) return;
@@ -117,11 +117,11 @@ const AnimatedBG: React.FC = () => {
 
         if (isFlashing) {
           node.flashTimer -= 1;
-          const flashDuration = 100;
+          const flashDuration = 300;
 
           if (node.flashTimer < flashDuration) {
             const t = (flashDuration - node.flashTimer) / flashDuration;
-            flashProgress = Math.sin((t * Math.PI) / 2);
+            flashProgress = Math.sin((t * Math.PI) / 2) * Math.sin(t * Math.PI);
           }
 
           if (node.flashTimer <= 0 && flashCooldown <= 0) {
@@ -132,8 +132,8 @@ const AnimatedBG: React.FC = () => {
 
             currentFlashingNodeIndex = nextIndex;
             nodes.current[currentFlashingNodeIndex].flashTimer =
-              100 + Math.random() * 50;
-            flashCooldown = 50;
+              300 + Math.random() * 200;
+            flashCooldown = 150;
           }
         } else {
           node.flashTimer = 0;
@@ -142,7 +142,7 @@ const AnimatedBG: React.FC = () => {
         if (flashCooldown > 0) flashCooldown -= 1;
 
         const radius =
-          node.radius + (isFlashing ? flashProgress * node.radius * 0.6 : 0);
+          node.radius + (isFlashing ? flashProgress * node.radius * 0.8 : 0);
         const color = isFlashing ? "#38bdf8" : "#ffffff";
 
         ctx.beginPath();
@@ -150,7 +150,7 @@ const AnimatedBG: React.FC = () => {
         ctx.fillStyle = color;
 
         ctx.shadowColor = color;
-        ctx.shadowBlur = isFlashing ? flashProgress * 20 : 0;
+        ctx.shadowBlur = isFlashing ? flashProgress * 25 : 0;
         ctx.fill();
         ctx.shadowBlur = 0;
       });
@@ -175,7 +175,7 @@ const AnimatedBG: React.FC = () => {
         left: 0,
         zIndex: -1,
         width: "100%",
-        height: "300vh", // Reflecting extended height
+        height: "300vh",
         backgroundColor: "#000",
       }}
     />

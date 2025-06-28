@@ -1,11 +1,19 @@
 "use client";
 import { LinkRounded } from "@mui/icons-material";
 import Modal from "./Modal";
-import { useState, useEffect, useReducer } from "react";
-import type { ProjectData } from "../types";
-import SectionLoading from "./SectionLoading";
-import ErrorComponent from "./ErrorComponent";
-import { notionReducer, initialState } from "../context/notionReducer";
+import { useState } from "react";
+import { usePortfolio } from "../context/PortfolioContext";
+
+interface ProjectData {
+    id: string;
+    projectName: string;
+    description: string;
+    stack: string[];
+    order: number;
+    hidden?: boolean;
+    mediaUrl?: string;
+    url?: string;
+}
 
 const ProjectSection = ({ data }: { data: ProjectData }) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -76,28 +84,9 @@ const ProjectSection = ({ data }: { data: ProjectData }) => {
 };
 
 const Projects = () => {
-    const [state, dispatch] = useReducer(notionReducer, initialState);
-
-    useEffect(() => {
-        dispatch({ type: "FETCH_START" });
-        const fetchData = async () => {
-            try {
-                const response = await fetch("/api/notion/projects");
-                if (!response.ok) throw new Error("Failed to fetch projects data");
-                const result = await response.json();
-                dispatch({ type: "FETCH_SUCCESS", payload: { projects: result.projects } });
-            } catch (err: unknown) {
-                if (err instanceof Error) dispatch({ type: "FETCH_ERROR", error: err.message });
-                else dispatch({ type: "FETCH_ERROR", error: "Unknown error" });
-            }
-        };
-        fetchData();
-    }, []);
-
-    if (state.loading) return <SectionLoading />;
-    if (state.error) return <ErrorComponent error={state.error} />;
-
-    const sortedProjects = [...(state.data?.projects ?? [])].sort((a, b) => a.order - b.order);
+    const { data } = usePortfolio();
+    const projectsData = data?.projects ?? [];
+    const sortedProjects = [...projectsData].sort((a, b) => a.order - b.order);
 
     return (
         <div>

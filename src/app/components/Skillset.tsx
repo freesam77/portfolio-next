@@ -1,53 +1,35 @@
 "use client";
-import { useEffect, useReducer, useMemo, useState } from "react";
-import SectionLoading from "./SectionLoading";
-import ErrorComponent from "./ErrorComponent";
-import { notionReducer, initialState } from "../context/notionReducer";
+import { useMemo, useState, useEffect } from "react";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const Skillset = () => {
-    const [state, dispatch] = useReducer(notionReducer, initialState);
+    const { data } = usePortfolio();
     const [selectedCategory, setSelectedCategory] = useState<string>("All");
     const [exitingSkills, setExitingSkills] = useState<string[]>([]);
 
-    useEffect(() => {
-        dispatch({ type: "FETCH_START" });
-        const fetchData = async () => {
-            try {
-                const response = await fetch("/api/notion/skillset");
-                if (!response.ok) throw new Error("Failed to fetch skillset data");
-                const result = await response.json();
-                dispatch({ type: "FETCH_SUCCESS", payload: { skillset: result.skillset } });
-            } catch (err: unknown) {
-                if (err instanceof Error) dispatch({ type: "FETCH_ERROR", error: err.message });
-                else dispatch({ type: "FETCH_ERROR", error: "Unknown error" });
-            }
-        };
-        fetchData();
-    }, []);
-
-    const data = state.data?.skillset ?? [];
+    const skillsetData = data?.skillset ?? [];
 
     // Build unique category list, excluding "Softskills"
     const categories: string[] = useMemo(() => {
-        const cats = data
+        const cats = skillsetData
             .flatMap(({ categories }) => categories || [])
             .filter((cat) => cat && cat.toLowerCase() !== "softskills");
         return ["All", ...Array.from(new Set(cats))];
-    }, [data]);
+    }, [skillsetData]);
 
     // Filter skills by selected category, always excluding "Softskills"
     const filteredSkills = useMemo(() => {
-        return data.filter(
+        return skillsetData.filter(
             (item) => !item.hidden &&
                 !(item.categories || []).some((cat) => cat.toLowerCase() === "softskills") &&
                 (selectedCategory === "All" ||
                     (item.categories || []).includes(selectedCategory))
         );
-    }, [data, selectedCategory]);
+    }, [skillsetData, selectedCategory]);
 
     useEffect(() => {
         // Identify skills that are leaving
-        const exiting = data
+        const exiting = skillsetData
             .filter(({ categories, skill }) =>
                 !(categories || []).some((cat) => cat.toLowerCase() === "softskills") &&
                 !filteredSkills.some((s) => s.skill === skill)
@@ -65,10 +47,7 @@ const Skillset = () => {
             setExitingSkills([]);
         }, 400);
         return () => clearTimeout(timeout);
-    }, [data, filteredSkills]);
-
-    if (state.loading) return <SectionLoading />;
-    if (state.error) return <ErrorComponent error={state.error} />;
+    }, [skillsetData, filteredSkills]);
 
     return (
         <div>
