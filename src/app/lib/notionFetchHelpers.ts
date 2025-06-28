@@ -6,7 +6,7 @@ import {
   DatabaseObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
-import notionDatabaseProcessor from "@/app/lib/notionPropertyProcessor";
+import notionPropertyProcessor from "@/app/lib/notionPropertyProcessor";
 import notionPageToHTML from "./notionPageToHTML";
 
 // Initialize Notion client
@@ -40,7 +40,7 @@ export const databaseFetch = async (
       if (!isPageObjectResponse(objectResponse)) {
         throw new Error("Response type is not page object");
       }
-      const processedData = notionDatabaseProcessor(objectResponse.properties);
+      const processedData = notionPropertyProcessor(objectResponse.properties);
       if (pageContentAsDescription) {
         const description = await notionPageToHTML(objectResponse.id, notion);
         Object.assign(processedData, {
