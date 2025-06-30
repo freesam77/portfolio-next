@@ -1,4 +1,5 @@
 import client from "@/app/lib/redisSetup";
+import { revalidatePath } from 'next/cache';
 import {
   fetchLandingPage,
   fetchLikes,
@@ -46,7 +47,17 @@ export async function POST(req: Request) {
       await client.set(`portfolioData_${section}`, JSON.stringify(result));
     }
 
-    return Response.json({ success: true });
+    // Clear the main portfolio data cache to force fresh data on next request
+    await client.del("portfolioData");
+
+    // Trigger ISR revalidation for the home page
+    revalidatePath('/');
+
+    return Response.json({ 
+      success: true, 
+      message: "Data updated and ISR revalidation triggered",
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
     console.error("❌ Error handling webhook:", error);
     return new Response("Internal Server Error", { status: 500 });

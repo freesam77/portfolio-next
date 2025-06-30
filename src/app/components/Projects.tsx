@@ -1,8 +1,7 @@
-"use client";
+"use client"
 import { LinkRounded } from "@mui/icons-material";
-import Modal from "./Modal";
+import ProjectModal from "./ProjectModal";
 import { useState } from "react";
-import { usePortfolio } from "../context/PortfolioContext";
 
 interface ProjectData {
     id: string;
@@ -15,92 +14,75 @@ interface ProjectData {
     url?: string;
 }
 
-const ProjectSection = ({ data }: { data: ProjectData }) => {
+interface ProjectsProps {
+    projects?: ProjectData[];
+}
+
+const Projects: React.FC<ProjectsProps> = ({ projects = [] }) => {
+    const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
     const [modalOpen, setModalOpen] = useState(false);
-    if (!data) {
-        return <div>There is no project data</div>;
-    }
+    const [modalProject, setModalProject] = useState<{ mediaUrl?: string, projectName: string } | null>(null);
 
-    const projectDetails = () => (
-        <div className="mt-4 md:mt-0">
-            <div className="md:flex justify-between mb-4">
-                <div className="m-auto md:m-0">
-                    <h2 className="mx-auto text-center md:text-left">
-                        {data.projectName}
-                    </h2>
-                    <div className="flex flex-wrap mb-4 justify-center md:justify-normal">
-                        {data.stack.sort().map((stackItem, index) => (
-                            <span
-                                className="bg-sky-900 shadow-sm rounded-md px-2 py-1 mr-2 my-2 md:mt-0 text-xs"
-                                key={`${stackItem}-${index}`}
-                            >
-                                {stackItem}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            </div>
-            <p
-                className="mb-4"
-                dangerouslySetInnerHTML={{ __html: data.description }}
-            />
-        </div>
-    );
+    const handleImageClick = (mediaUrl?: string, projectName = "") => {
+        setModalProject({ mediaUrl, projectName });
+        setModalOpen(true);
+    };
 
     return (
-        <div>
-            <div className="card md:flex align-top p-8 md:p-4 mb-4">
-                <img
-                    className={`md:mr-8 m-auto md:m-0 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${data.mediaUrl && "cursor-pointer hover:ring-sky-400"}`}
-                    src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
-                    onClick={() => {
-                        if (data.mediaUrl) {
-                            setModalOpen(true);
-                        }
-                    }}
-                />
-
-                {projectDetails()}
-                {data.url && (
-                    <a href={data.url} className="flex justify-end md:justify-start" target="_blank">
-                        <LinkRounded />
-                        <p className="md:hidden ml-1 italic">Link to Project</p>
-                    </a>
-                )}
+        <>
+            <div>
+                {sortedProjects.map((project: ProjectData) => {
+                    if (project.hidden) return null;
+                    return (
+                        <div className="card md:flex items-start p-8 md:p-4 mb-4" key={`${project.projectName}-${project.order}`}>
+                            <img
+                                className={`md:mr-8 m-auto md:m-0 w-[250px] h-[100%] ring-2 ring-slate-400 rounded-sm ${project.mediaUrl ? "cursor-pointer hover:ring-sky-400" : ""}`}
+                                src={project.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
+                                alt={project.projectName}
+                                onClick={() => handleImageClick(project.mediaUrl, project.projectName)}
+                            />
+                            <div className="mt-4 md:mt-0 flex-1 align-top">
+                                <div className="md:flex justify-between mb-4 items-baseline" >
+                                    <div className="m-auto md:m-0">
+                                        <h2 className="mx-auto text-center md:text-left">
+                                            {project.projectName}
+                                        </h2>
+                                        <div className="flex flex-wrap mb-4 justify-center md:justify-normal">
+                                            {project.stack.sort().map((stackItem, index) => (
+                                                <span
+                                                    className="bg-sky-900 shadow-sm rounded-md px-2 py-1 mr-2 my-2 md:mt-0 text-xs"
+                                                    key={`${stackItem}-${index}`}
+                                                >
+                                                    {stackItem}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    {project.url && (
+                                        <a href={project.url} className="flex items-center ml-4" target="_blank">
+                                            <LinkRounded />
+                                            <p className="md:hidden ml-1 italic">Link to Project</p>
+                                        </a>
+                                    )}
+                                </div>
+                                <section
+                                    className="mb-4"
+                                    dangerouslySetInnerHTML={{ __html: project.description }}
+                                />
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
-            <Modal
-                isOpen={modalOpen}
-                onClose={() => {
-                    setModalOpen(false);
-                }}
-            >
-                <img
-                    className="rounded-sm mx-auto"
-                    src={data.mediaUrl || "https://placehold.co/600x400?text=No+Preview"}
+            {modalProject && (
+                <ProjectModal
+                    mediaUrl={modalProject.mediaUrl}
+                    projectName={modalProject.projectName}
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
                 />
-            </Modal>
-        </div>
-    );
-};
-
-const Projects = () => {
-    const { data } = usePortfolio();
-    const projectsData = data?.projects ?? [];
-    const sortedProjects = [...projectsData].sort((a, b) => a.order - b.order);
-
-    return (
-        <div>
-            {sortedProjects.map((project: ProjectData) => {
-                return (
-                    !project.hidden && (
-                        <ProjectSection
-                            data={project}
-                            key={`${project.projectName}-${project.order}`}
-                        />
-                    )
-                );
-            })}
-        </div>
+            )}
+        </>
     );
 };
 

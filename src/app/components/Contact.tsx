@@ -1,15 +1,22 @@
 "use client";
 import Tooltip from "./Tooltip";
-import { usePortfolio } from "../context/PortfolioContext";
 
-const Contact = () => {
-  const { data } = usePortfolio();
-  const contactData = data?.contact ?? [];
+interface ContactData {
+  id: string;
+  OnlinePresence: string;
+  Links: string;
+  Icon?: string;
+}
 
+interface ContactProps {
+  contact?: ContactData[];
+}
+
+const Contact: React.FC<ContactProps> = ({ contact = [] }) => {
   return (
     <div className="bg-gradient-to-t from-sky-300/40 to-white/0 backdrop-blur-xs py-8">
       <div className="flex justify-between w-[200px] py-6 mx-auto">
-        {contactData
+        {contact
           .filter(({ OnlinePresence }) => OnlinePresence !== "Resume")
           .map(({ OnlinePresence, Links, Icon }) => (
             <Tooltip

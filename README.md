@@ -72,3 +72,7 @@ src/
 ## 🚀 Deployment
 
 This site lives on Netlify, with automatic deployments from the main branch. Netlify Dev helps me test everything locally before it goes live.
+
+## 📝 Notes
+
+- The `Loading` component in `src/app/components/Loading.tsx` is currently unused, but is kept for future use because I like the style. You can use it for client-side loading states or future interactive features.

@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['i.imgur.com', 'placehold.co'],
   },
+  // Optimize for static generation
+  output: 'standalone',
+  // Enable compression
+  compress: true,
 };
 
 export default nextConfig;

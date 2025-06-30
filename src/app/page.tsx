@@ -1,4 +1,3 @@
-"use client";
 import NavigationBar from "./components/NavigationBar";
 import About from "./components/About";
 import Skillset from "./components/Skillset";
@@ -6,34 +5,14 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import AnimatedBG from "./components/AnimatedBG";
 import Likes from "./components/Likes";
-import { usePortfolio } from "./context/PortfolioContext";
-import Loading from "./components/Loading";
+import { fetchPortfolioData } from "./lib/portfolioData";
 
-export default function Home() {
-    const { data, loading, error } = usePortfolio();
+// Enable ISR with revalidation every 60 seconds (1 minute)
+export const revalidate = 60;
 
-    if (loading) {
-        return <div>
-            <AnimatedBG />
-            <Loading />
-        </div>;
-    }
-
-    if (error) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <p className="text-lg text-red-600">Error: {error}</p>
-                    <button
-                        onClick={() => window.location.reload()}
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                        Retry
-                    </button>
-                </div>
-            </div>
-        );
-    }
+export default async function Home() {
+    // Fetch data server-side
+    const data = await fetchPortfolioData();
 
     return (
         <div>
@@ -41,20 +20,20 @@ export default function Home() {
             <NavigationBar contactData={data?.contact} />
             <main className="pt-[100px] md:pt-0 mx-auto w-[80%] max-w-[950px]">
                 <section id="about" className="flex flex-col justify-center min-h-screen mb-[100px]">
-                    <About />
-                    <Likes />
+                    <About landingPage={data?.landingPage} />
+                    <Likes likes={data?.likes} />
                 </section>
                 <section id="skillset" className="min-h-screen mb-[120px]">
                     <h2 className="mb-10">Skillset</h2>
-                    <Skillset />
+                    <Skillset skillset={data?.skillset} />
                 </section>
                 <section id="projects" className="min-h-screen mb-[100px]">
                     <h2 className="mb-10">Projects</h2>
-                    <Projects />
+                    <Projects projects={data?.projects} />
                 </section>
             </main>
             <section id="contact">
-                <Contact />
+                <Contact contact={data?.contact} />
             </section>
         </div>
     );

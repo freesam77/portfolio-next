@@ -1,14 +1,21 @@
 "use client";
 
 import React, { useEffect, useRef, useMemo } from "react";
-import { usePortfolio } from "../context/PortfolioContext";
+
+interface LikeData {
+  id: string;
+  likes: string;
+  tagline?: string;
+  icon?: string;
+  hidden?: boolean;
+}
 
 interface LikesProps {
   delay?: number;
+  likes?: LikeData[];
 }
 
-const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
-  const { data } = usePortfolio();
+const Likes: React.FC<LikesProps> = ({ delay = 3000, likes = [] }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [displayText, setDisplayText] = React.useState({ title: "", tagline: "" });
   const [showCursor, setShowCursor] = React.useState(true);
@@ -17,8 +24,8 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000 }) => {
 
   // Filter out empty items
   const items = useMemo(
-    () => (data?.likes ?? []).filter((item) => item.likes.trim() !== ""),
-    [data?.likes],
+    () => likes.filter((item) => item.likes.trim() !== ""),
+    [likes],
   );
 
   useEffect(() => {

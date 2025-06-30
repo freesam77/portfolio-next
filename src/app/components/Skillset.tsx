@@ -1,13 +1,23 @@
 "use client";
 import { useMemo, useState, useEffect } from "react";
-import { usePortfolio } from "../context/PortfolioContext";
 
-const Skillset = () => {
-    const { data } = usePortfolio();
+interface SkillData {
+  id: string;
+  name: string;
+  skill: string;
+  categories?: string[];
+  hidden?: boolean;
+}
+
+interface SkillsetProps {
+  skillset?: SkillData[];
+}
+
+const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
     const [selectedCategory, setSelectedCategory] = useState<string>("All");
     const [exitingSkills, setExitingSkills] = useState<string[]>([]);
 
-    const skillsetData = data?.skillset ?? [];
+    const skillsetData = skillset;
 
     // Build unique category list, excluding "Softskills"
     const categories: string[] = useMemo(() => {

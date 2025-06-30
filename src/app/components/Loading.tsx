@@ -1,5 +1,8 @@
 import React from "react";
 
+// NOTE: This component is currently unused, but is kept for future use because the style is liked by the author.
+// You can use this for client-side loading states or future interactive features.
+
 export default function Loading() {
   return (
     <div className="flex items-center justify-center min-h-screen">

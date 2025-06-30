@@ -1,16 +1,17 @@
 "use client";
-import { usePortfolio } from "../context/PortfolioContext";
 
-const About = () => {
-    const { data } = usePortfolio();
+interface AboutProps {
+    landingPage?: string;
+}
 
-    if (!data?.landingPage) return <h1>Landing Page not found</h1>;
+const About: React.FC<AboutProps> = ({ landingPage }) => {
+    if (!landingPage) return <h1>Landing Page not found</h1>;
     
     return (
         <section
             className="about-section"
             dangerouslySetInnerHTML={{
-                __html: data.landingPage,
+                __html: landingPage,
             }}
         />
     );
