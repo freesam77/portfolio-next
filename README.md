@@ -13,29 +13,32 @@ Welcome to my portfolio! This is where I showcase my work, skills, and projects.
 ## 🛠️ Tech Stack
 
 ### Frontend
-| Tech | Description |
-|------|-------------|
-| [Next.js](https://nextjs.org/) | React framework for production-grade applications |
-| [TypeScript](https://www.typescriptlang.org/) | Static type checking for JavaScript |
-| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework |
-| [Material-UI](https://mui.com/) | React component library implementing Material Design |
-| [Framer Motion](https://www.framer.com/motion/) | Production-ready motion library for React |
+
+| Tech                                            | Description                                          |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| [Next.js](https://nextjs.org/)                  | React framework for production-grade applications    |
+| [TypeScript](https://www.typescriptlang.org/)   | Static type checking for JavaScript                  |
+| [Tailwind CSS](https://tailwindcss.com/)        | Utility-first CSS framework                          |
+| [Material-UI](https://mui.com/)                 | React component library implementing Material Design |
+| [Framer Motion](https://www.framer.com/motion/) | Production-ready motion library for React            |
 
 ### Backend
-| Tech | Description |
-|------|-------------|
-| [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | Serverless API endpoints with Next.js |
-| [Notion API](https://developers.notion.com/) | Content management and database integration |
-| [Redis](https://redis.io/) | In-memory data structure store for caching |
-| [Netlify](https://www.netlify.com/) | Cloud platform for static site deployment |
+
+| Tech                                                                                               | Description                                 |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | Serverless API endpoints with Next.js       |
+| [Notion API](https://developers.notion.com/)                                                       | Content management and database integration |
+| [Redis](https://redis.io/)                                                                         | In-memory data structure store for caching  |
+| [Netlify](https://www.netlify.com/)                                                                | Cloud platform for static site deployment   |
 
 ### Development
-| Tech | Description |
-|------|-------------|
-| [Turbopack](https://turbo.build/pack) | Incremental bundler optimized for JavaScript and TypeScript |
-| [ESLint](https://eslint.org/) | Static code analysis tool |
-| [Prettier](https://prettier.io/) | Code formatter for consistent style |
-| [TypeScript](https://www.typescriptlang.org/) | Static type checking for JavaScript |
+
+| Tech                                          | Description                                                 |
+| --------------------------------------------- | ----------------------------------------------------------- |
+| [Turbopack](https://turbo.build/pack)         | Incremental bundler optimized for JavaScript and TypeScript |
+| [ESLint](https://eslint.org/)                 | Static code analysis tool                                   |
+| [Prettier](https://prettier.io/)              | Code formatter for consistent style                         |
+| [TypeScript](https://www.typescriptlang.org/) | Static type checking for JavaScript                         |
 
 ## 🔧 Getting Started
 
