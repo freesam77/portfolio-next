@@ -4,6 +4,7 @@ import {
 	Card,
 	CardContent,
 	CardFooter,
+	CardHeader
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -22,8 +23,11 @@ export default function CardPost({
 }: ProjectData) {
 	return (
 		<Card className="w-full max-w-xs shadow-none bg-gray-900/60 backdrop-blur">
+			<CardHeader>
+				<h3>{projectName}</h3>
+			</CardHeader>
 			{mediaUrl && (
-				<div className="relative w-full aspect-video bg-muted border-y rounded-t-lg overflow-hidden">
+				<div className="relative w-full aspect-video bg-muted border-y overflow-hidden">
 					<Image
 						src={mediaUrl}
 						alt={projectName}
@@ -34,10 +38,8 @@ export default function CardPost({
 				</div>
 			)}
 			<CardContent>
-				<h3>{projectName}</h3>
-
 				{stack.length > 0 && (
-					<div className="flex flex-wrap gap-1 w-[100%] mb-4">
+					<div className="flex flex-wrap gap-2 w-[100%] mb-4">
 						{stack.map(st => (
 							<StackBadge key={st}>{st}</StackBadge>
 						))}
@@ -58,12 +60,15 @@ export default function CardPost({
 				<>
 					<Separator />
 					<CardFooter>
+						{/* empty divs to just fill the grid */}
+						<div />
 						<Button asChild variant="ghost" className="w-full text-muted-foreground">
 							<a href={url} target="_blank" rel="noopener noreferrer">
 								<LinkIcon />
-								<span className="hidden sm:inline">Link</span>
+								<span className="">Link</span>
 							</a>
 						</Button>
+						<div />
 					</CardFooter>
 				</>
 			)}

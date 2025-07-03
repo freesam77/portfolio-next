@@ -85,7 +85,7 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 				/>
 			</div>
 
-			<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+			<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
 				{filteredSkills.map((item) => {
 					// @ts-expect-error: src exists on runtime data
 					const src = typeof item.src === 'string' ? item.src : '';

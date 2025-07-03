@@ -7,9 +7,11 @@ interface BadgeSecondaryDemoProps {
 
 const StackBadge: React.FC<BadgeSecondaryDemoProps> = ({ children }) => {
 	return (
-		<Badge className="rounded-full border-none bg-gradient-to-r from-sky-500 to-indigo-600 text-white">
-			{children}
-		</Badge>
+		<div className="bg-gradient-to-r from-sky-400 to-indigo-600 rounded-full p-[2px] flex items-center justify-center">
+			<Badge className="bg-background hover:bg-background text-foreground rounded-full border-none">
+				{children}
+			</Badge>
+		</div>
 	);
 };
 
