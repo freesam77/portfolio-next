@@ -85,7 +85,7 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 				/>
 			</div>
 
-			<div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+			<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
 				{filteredSkills.map((item) => {
 					// @ts-expect-error: src exists on runtime data
 					const src = typeof item.src === 'string' ? item.src : '';
@@ -95,15 +95,13 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 							key={skill}
 							className={`bg-gray-900/60 backdrop-blur transition-all ${exitingSkills.includes(skill) ? 'animate-fade-out' : 'animate-fade-in'}`}
 						>
-							<CardContent className='flex items-center align-middle justify-items-center p-0'>
+							<CardContent className="flex items-center p-0 ">
 								{src && (
-									<div className="p-2 object-fill rounded-xl bg-white/80 shadow-sm size-20 flex items-center m-auto md:m-0">
-										<img src={src} alt={skill} />
+									<div className="p-2 rounded-xl bg-white/80 size-20 flex items-center justify-center">
+										<img src={src} alt={skill} className="max-h-12 max-w-12 object-contain" />
 									</div>
 								)}
-								<p className="sm:ml-0 md:ml-2">
-									{skill}
-								</p>
+								<p className="ml-4 sm:text-md">{skill}</p>
 							</CardContent>
 						</Card>
 					);

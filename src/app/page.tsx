@@ -8,7 +8,7 @@ import Likes from '@/components/sections/Likes';
 import { fetchPortfolioData } from '@/lib/portfolioData';
 
 // Enable ISR with revalidation every 60 seconds (1 minute)
-export const revalidate = 60;
+export const revalidate = process.env.NODE_ENV === 'production' ? 60 : false;
 
 export default async function Home() {
 	// Fetch data server-side

@@ -45,25 +45,26 @@ const AnimatedBG: React.FC = () => {
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 
+		// Initialize nodes only once
+		const numNodes = getNumNodes();
+		numNodesRef.current = numNodes;
+		maxDistanceRef.current = getMaxDistance();
+		nodes.current = [];
+		for (let i = 0; i < numNodes; i++) {
+			nodes.current.push({
+				x: Math.random() * window.innerWidth,
+				y: Math.random() * window.innerHeight * 3,
+				vx: (Math.random() - 0.5) * 0.08,
+				vy: (Math.random() - 0.5) * 0.08,
+				radius: 1 + Math.random() * 2.5,
+				flashTimer: Math.random() * 8000,
+			});
+		}
+
 		const resize = () => {
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight * 3;
-
-			// Reset nodes
-			nodes.current = [];
-			numNodesRef.current = getNumNodes();
 			maxDistanceRef.current = getMaxDistance();
-
-			for (let i = 0; i < numNodesRef.current; i++) {
-				nodes.current.push({
-					x: Math.random() * canvas.width,
-					y: Math.random() * canvas.height,
-					vx: (Math.random() - 0.5) * 0.08,
-					vy: (Math.random() - 0.5) * 0.08,
-					radius: 1 + Math.random() * 2.5,
-					flashTimer: Math.random() * 8000,
-				});
-			}
 		};
 		resize();
 		window.addEventListener('resize', resize);
