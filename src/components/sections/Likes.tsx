@@ -16,6 +16,15 @@ interface LikesProps {
 	likes?: LikeData[];
 }
 
+function shuffleArray<T>(array: T[]): T[] {
+	const arr = [...array];
+	for (let i = arr.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[arr[i], arr[j]] = [arr[j], arr[i]];
+	}
+	return arr;
+}
+
 const Likes: React.FC<LikesProps> = ({ delay = 3000, likes = [] }) => {
 	const [currentIndex, setCurrentIndex] = React.useState(0);
 	const [displayText, setDisplayText] = React.useState({ title: '', tagline: '' });
@@ -23,8 +32,8 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000, likes = [] }) => {
 	const [activeLine, setActiveLine] = React.useState<'title' | 'tagline'>('title');
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
 
-	// Filter out empty items
-	const items = useMemo(() => likes.filter((item) => item.likes.trim() !== ''), [likes]);
+	// Shuffle the items only once per mount or likes change
+	const items = useMemo(() => shuffleArray(likes.filter((item) => item.likes.trim() !== '')), [likes]);
 
 	useEffect(() => {
 		if (items.length === 0) return;
