@@ -100,7 +100,9 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000, likes = [] }) => {
 	return (
 		<Card className="font-mono bg-gray-900/60 text-gray-100 p-5 rounded-lg max-w-2xl w-[90%] h-[150px] backdrop-blur">
 			<span className="text-sky-300 text-md font-bold mb-2">
-				{displayText.title}
+				<span dangerouslySetInnerHTML={{
+					__html: displayText.title,
+				}} />
 				{activeLine === 'title' && (
 					<span
 						className={`inline-block w-2 h-6 bg-gray-100 align-middle ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'}`}
@@ -110,7 +112,9 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000, likes = [] }) => {
 
 			{displayText.tagline && (
 				<span className="text-gray-300 text-sm mb-4">
-					{displayText.tagline}
+					<span dangerouslySetInnerHTML={{
+						__html: displayText.tagline,
+					}} />
 					{activeLine === 'tagline' && (
 						<span
 							className={`inline-block w-2 h-4 bg-gray-100 align-middle ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'}`}
