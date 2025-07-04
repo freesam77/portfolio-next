@@ -98,7 +98,7 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000, likes = [] }) => {
 	}
 
 	return (
-		<Card className="font-mono bg-gray-900/60 text-gray-100 p-5 rounded-lg max-w-2xl w-[90%] h-[150px] backdrop-blur">
+		<Card className="font-mono bg-gray-900/60 text-gray-100 p-5 rounded-lg max-w-2xl w-[90%] min-h-[200px] backdrop-blur">
 			<span className="text-sky-300 text-md font-bold mb-2">
 				<span dangerouslySetInnerHTML={{
 					__html: displayText.title,
