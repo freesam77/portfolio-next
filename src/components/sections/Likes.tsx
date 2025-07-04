@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useMemo } from 'react';
+import { Card } from "../ui/card"
 
 interface LikeData {
 	id: string;
@@ -97,27 +98,27 @@ const Likes: React.FC<LikesProps> = ({ delay = 3000, likes = [] }) => {
 	}
 
 	return (
-		<div className="font-mono bg-gray-900/60 text-gray-100 p-5 rounded-lg max-w-2xl w-[90%] h-[150px] backdrop-blur">
-			<div className="text-cyan-400 text-lg mb-2">
+		<Card className="font-mono bg-gray-900/60 text-gray-100 p-5 rounded-lg max-w-2xl w-[90%] h-[150px] backdrop-blur">
+			<span className="text-sky-300 text-md font-bold mb-2">
 				{displayText.title}
 				{activeLine === 'title' && (
 					<span
 						className={`inline-block w-2 h-6 bg-gray-100 align-middle ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'}`}
 					/>
 				)}
-			</div>
+			</span>
 
 			{displayText.tagline && (
-				<div className="text-blue-300 text-sm mb-4">
+				<span className="text-gray-300 text-sm mb-4">
 					{displayText.tagline}
 					{activeLine === 'tagline' && (
 						<span
 							className={`inline-block w-2 h-4 bg-gray-100 align-middle ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'}`}
 						/>
 					)}
-				</div>
+				</span>
 			)}
-		</div>
+		</Card>
 	);
 };
 

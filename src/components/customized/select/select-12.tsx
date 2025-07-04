@@ -54,7 +54,7 @@ export default function FancyMultiSelect({
 	return (
 		<div className="w-full">
 			<Command className="overflow-visible">
-				<div className="rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+				<div className="rounded-lg border border-input px-3 py-4 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
 					<div className="flex flex-wrap gap-1">
 						{selected.map((option) => {
 							return (

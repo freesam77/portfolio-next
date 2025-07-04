@@ -22,7 +22,7 @@ export default function CardPost({
 	stack
 }: ProjectData) {
 	return (
-		<Card className="w-full max-w-xs shadow-none bg-gray-900/60 backdrop-blur">
+		<Card className="w-full max-w-xs">
 			<CardHeader>
 				<h3>{projectName}</h3>
 			</CardHeader>
