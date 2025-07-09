@@ -14,7 +14,7 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ contact = [] }) => {
 	return (
-		<div className="bg-gradient-to-t from-sky-300/40 to-white/0 backdrop-blur-xs py-10 pb-20 md:pb-10">
+		<div className="bg-gradient-to-t from-sky-300/40 to-white/0 backdrop-blur-xs py-10 pb-30 md:pb-10">
 			<div className="flex gap-2 justify-between w-[200px] py-6 mx-auto">
 				{contact
 					.map(({ OnlinePresence, Links, Icon }) => (

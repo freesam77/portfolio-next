@@ -18,16 +18,16 @@ export default async function Home() {
 		<div>
 			<AnimatedBG />
 			<NavigationBar />
-			<main className="pt-[100px] mx-auto w-[80%] max-w-[950px]">
-				<section id="about" className="flex flex-col justify-center min-h-screen mb-[100px]">
+			<main className="mx-auto w-[80%] max-w-[950px]">
+				<section id="about" className="flex flex-col justify-center min-h-screen">
 					<About landingPage={data?.landingPage} />
 					<Likes likes={data?.likes} />
 				</section>
-				<section id="skillset" className="min-h-screen mb-[120px]">
+				<section id="skillset" className="min-h-screen">
 					<h2 className="mb-10">Skillset</h2>
 					<Skillset skillset={data?.skillset} />
 				</section>
-				<section id="projects" className="min-h-screen mb-[100px]">
+				<section id="projects" className="min-h-screen">
 					<h2 className="mb-10">Projects</h2>
 					<Projects projects={data?.projects} />
 				</section>
