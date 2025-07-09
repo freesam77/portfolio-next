@@ -93,7 +93,7 @@ const NavigationBar = ({ contactData }: NavigationBarProps) => {
 
 	return (
 		<nav
-			className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[80%] max-w-[1100px] md:h-16 z-10 bg-white/20 backdrop-blur-[3px] shadow-md ${isMenuOpen ? 'rounded-t-3xl rounded-b-3xl' : 'rounded-full'}`}
+			className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[80%] max-w-[1100px] md:h-16 z-10 bg-black/30 backdrop-blur-md shadow-md ${isMenuOpen ? 'rounded-t-3xl rounded-b-3xl' : 'rounded-full'}`}
 		>
 			<div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
 				<div className="md:flex items-center">
