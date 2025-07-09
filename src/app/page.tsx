@@ -17,8 +17,8 @@ export default async function Home() {
 	return (
 		<div>
 			<AnimatedBG />
-			<NavigationBar contactData={data?.contact} />
-			<main className="pt-[100px] md:pt-0 mx-auto w-[80%] max-w-[950px]">
+			<NavigationBar />
+			<main className="pt-[100px] mx-auto w-[80%] max-w-[950px]">
 				<section id="about" className="flex flex-col justify-center min-h-screen mb-[100px]">
 					<About landingPage={data?.landingPage} />
 					<Likes likes={data?.likes} />
@@ -32,9 +32,9 @@ export default async function Home() {
 					<Projects projects={data?.projects} />
 				</section>
 			</main>
-			<section id="contact">
+			<footer id="contact">
 				<Contact contact={data?.contact} />
-			</section>
+			</footer>
 		</div>
 	);
 }

@@ -60,7 +60,7 @@ body {
 	}
 
 	.nav-link {
-		@apply h-[100%] content-center cursor-pointer px-2;
+		@apply h-[100%] content-center cursor-pointer;
 	}
 
 	.nav-link-active {

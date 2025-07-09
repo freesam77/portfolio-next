@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import { Menu, Close } from '@mui/icons-material';
+import NavigationMenuDesktop from '../customized/desktop-nav/deskop-nav';
+import NavigationMenuMobile from "../customized/mobile-nav/mobile-nav"
 
 const scrollLogic = (id: string) => {
 	const targetElement = document.getElementById(id);
@@ -14,33 +14,15 @@ const scrollLogic = (id: string) => {
 	}
 };
 
-interface NavigationBarProps {
-	contactData?: Array<{ OnlinePresence: string; Links: string }>;
-}
+const baseSections = ['About', 'Skillset', 'Projects', 'Contact']
 
-const NavigationBar = ({ contactData }: NavigationBarProps) => {
-	const [baseSections, setBaseSections] = useState(['About', 'Skillset', 'Projects', 'Contact']);
+const NavigationBar = () => {
 	const [activeSection, setActiveSection] = useState('About');
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-	// Update sections based on contact data
-	useEffect(() => {
-		if (contactData) {
-			const resumeEntry = contactData.find((item) => item.OnlinePresence === 'Resume');
-			if (resumeEntry) {
-				setBaseSections((prev) => prev.filter((s) => s !== 'Resume').concat('Resume'));
-			} else {
-				setBaseSections((prev) => prev.filter((s) => s !== 'Resume'));
-			}
-		}
-	}, [contactData]);
-
 	// Callback functions
 	const setActiveOnScroll = useCallback(() => {
 		const scrollPosition = window.scrollY + window.innerHeight / 2;
 
 		baseSections.forEach((section) => {
-			if (section === 'Resume') return; // Skip tracking Resume
 			const element = document.getElementById(section.toLowerCase());
 			if (element) {
 				const { offsetTop, offsetHeight } = element;
@@ -55,7 +37,7 @@ const NavigationBar = ({ contactData }: NavigationBarProps) => {
 				}
 			}
 		});
-	}, [baseSections]);
+	}, []);
 
 	const scrollToID = useCallback(() => {
 		const hash = window.location.hash;
@@ -65,8 +47,9 @@ const NavigationBar = ({ contactData }: NavigationBarProps) => {
 		}
 	}, []);
 
-	const navOnClick = useCallback((event: React.MouseEvent<HTMLElement>, section: string) => {
-		event.preventDefault();
+	const navOnClick = (event: React.MouseEvent<HTMLElement>) => {
+		const section = (event.target as HTMLElement).textContent;
+		if (!section) return;
 		scrollLogic(section.toLowerCase());
 
 		if (section.toLowerCase() === baseSections[0].toLowerCase()) {
@@ -74,10 +57,7 @@ const NavigationBar = ({ contactData }: NavigationBarProps) => {
 		} else {
 			window.history.pushState(null, '', `#${section.toLowerCase()}`);
 		}
-
-		// Close menu after click on mobile
-		setIsMenuOpen(false);
-	}, []);
+	}
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -86,113 +66,13 @@ const NavigationBar = ({ contactData }: NavigationBarProps) => {
 
 		window.addEventListener('scroll', setActiveOnScroll);
 		return () => window.removeEventListener('scroll', setActiveOnScroll);
-	}, []);
-
-	// Get resume data from contactData prop
-	const resumeData = contactData?.find((item) => item.OnlinePresence === 'Resume');
+	}, [scrollToID, setActiveOnScroll]);
 
 	return (
-		<nav
-			className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[80%] max-w-[1100px] md:h-16 z-10 bg-black/30 backdrop-blur-md shadow-md ${isMenuOpen ? 'rounded-t-3xl rounded-b-3xl' : 'rounded-full'}`}
-		>
-			<div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2 md:px-0">
-				<div className="md:flex items-center">
-					<span
-						onClick={(e) => navOnClick(e, baseSections[0])}
-						className="flex items-center justify-center cursor-pointer"
-					>
-						<img src="/sam_2019_darkmode_blue_gradient.svg" alt="React Logo" width="37" />
-						<h1 className="ml-3 mb-0">Samuel Razali</h1>
-					</span>
-				</div>
-
-				{/* Navigation Items for Web*/}
-				<div className={'hidden md:flex items-center h-[100%] text-lg'}>
-					{baseSections.map((section) => {
-						const isResume = section.toLowerCase() === 'resume';
-						const id = isResume ? resumeData?.Links || '#' : `#${section.trim().toLowerCase()}`;
-						const isActive = activeSection === section;
-
-						if (isResume) {
-							return (
-								<span key="resume" className="nav-link">
-									<a
-										href={id}
-										target="_blank"
-										className="text-gray-200 hover:[text-shadow:_0_0_17px] hover:text-sky-300"
-									>
-										<DescriptionOutlinedIcon fontSize="small" viewBox="8 0 10 30" />
-										Resume
-									</a>
-								</span>
-							);
-						}
-
-						return (
-							<span
-								key={section.toLowerCase()}
-								className={`nav-link ${isActive && 'nav-link-active'}`}
-							>
-								<span
-									id={id}
-									onClick={isResume ? undefined : (e) => navOnClick(e, section)}
-									className={`${isActive && 'active-link'} ${isResume && 'border-l-2 pl-4 block'}`}
-								>
-									{section}
-								</span>
-							</span>
-						);
-					})}
-				</div>
-
-				<span
-					className="md:hidden m-0 h-16 content-center"
-					onClick={() => setIsMenuOpen(!isMenuOpen)}
-				>
-					{isMenuOpen ? <Close /> : <Menu />}
-				</span>
-			</div>
-
-			{/* Navigation Items for Mobile*/}
-			{isMenuOpen && (
-				<div className={'md:hidden bg-black/60 text-lg rounded-b-3xl z-50'}>
-					{baseSections.map((section) => {
-						const isResume = section.toLowerCase() === 'resume';
-						const id = isResume ? resumeData?.Links || '#' : `#${section.trim().toLowerCase()}`;
-						const isActive = activeSection === section;
-
-						if (isResume) {
-							return (
-								<span key={section.toLowerCase()}>
-									<a
-										href={id}
-										target="_blank"
-										className={`px-6 py-4 block ${isActive && 'bg-gradient-to-r from-sky-300/30 to-white/0'}`}
-									>
-										<DescriptionOutlinedIcon fontSize="small" viewBox="8 0 10 30" />
-										Resume
-									</a>
-								</span>
-							);
-						}
-
-						return (
-							<span
-								id={id}
-								key={section.toLowerCase()}
-								onClick={isResume ? undefined : (e) => navOnClick(e, section)}
-							>
-								<div
-									className={`px-6 py-4 ${isActive && 'bg-gradient-to-r from-sky-300/30 to-white/0'}`}
-								>
-									{section}
-								</div>
-							</span>
-						);
-					})}
-				</div>
-			)}
-		</nav>
+		<>
+			<NavigationMenuDesktop navOnClick={navOnClick} sections={baseSections} activeSection={activeSection} parentClassName="hidden md:block" />
+			<NavigationMenuMobile navOnClick={navOnClick} sections={baseSections} activeSection={activeSection} parentClassName="block md:hidden" />
+		</>
 	);
 };
 

@@ -14,10 +14,9 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ contact = [] }) => {
 	return (
-		<div className="bg-gradient-to-t from-sky-300/40 to-white/0 backdrop-blur-xs py-8">
-			<div className="flex justify-between w-[200px] py-6 mx-auto">
+		<div className="bg-gradient-to-t from-sky-300/40 to-white/0 backdrop-blur-xs py-10 pb-20 md:pb-10">
+			<div className="flex gap-2 justify-between w-[200px] py-6 mx-auto">
 				{contact
-					.filter(({ OnlinePresence }) => OnlinePresence !== 'Resume')
 					.map(({ OnlinePresence, Links, Icon }) => (
 						<Tooltip description={OnlinePresence} key={`${OnlinePresence}-${Links}`}>
 							<a href={Links} key={OnlinePresence}>
