@@ -1,7 +1,7 @@
 import React from 'react';
 
 type NavigationMenuDesktopProps = {
-	navOnClick: (event: React.MouseEvent<HTMLElement>) => void;
+	navOnClick: (event: React.MouseEvent<HTMLElement>, mobile: boolean) => void;
 	sections: string[];
 	activeSection: string;
 	parentClassName?: string;
@@ -10,7 +10,7 @@ type NavigationMenuDesktopProps = {
 const NavigationMenuDesktop = ({ navOnClick, activeSection, sections, parentClassName }: NavigationMenuDesktopProps) => {
 	return (
 		<nav
-			className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[80%] max-w-[1100px] h-16 z-10 bg-black/30 backdrop-blur-md shadow-md rounded-full ${parentClassName}`}
+			className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[80%] max-w-[1100px] h-16 z-10 rounded-full ${parentClassName}`}
 		>
 			<div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2">
 				<div className="flex items-center">
@@ -31,7 +31,7 @@ const NavigationMenuDesktop = ({ navOnClick, activeSection, sections, parentClas
 							>
 								<span
 									id={id}
-									onClick={navOnClick}
+									onClick={(e) => navOnClick(e, false)}
 									className={`${isActive && 'active-link'}`}
 								>
 									{section}

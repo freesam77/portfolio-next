@@ -19,16 +19,16 @@ export default async function Home() {
 			<AnimatedBG />
 			<NavigationBar />
 			<main className="mx-auto w-[80%] max-w-[950px]">
-				<section id="about" className="flex flex-col justify-center min-h-screen">
+				<section id="about">
 					<About landingPage={data?.landingPage} />
 					<Likes likes={data?.likes} />
 				</section>
-				<section id="skillset" className="min-h-screen">
-					<h2 className="mb-10">Skillset</h2>
+				<section id="skillset">
+					<h2 >Skillset</h2>
 					<Skillset skillset={data?.skillset} />
 				</section>
-				<section id="projects" className="min-h-screen">
-					<h2 className="mb-10">Projects</h2>
+				<section id="projects">
+					<h2>Projects</h2>
 					<Projects projects={data?.projects} />
 				</section>
 			</main>

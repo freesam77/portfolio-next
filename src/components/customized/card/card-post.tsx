@@ -49,10 +49,10 @@ export default function CardPost({
 				<Separator />
 
 
-				<section className="mt-2 text-muted-foreground" dangerouslySetInnerHTML={{
+				<div className="mt-2 text-muted-foreground" dangerouslySetInnerHTML={{
 					__html: description,
 				}}>
-				</section>
+				</div>
 
 			</CardContent>
 

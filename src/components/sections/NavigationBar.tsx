@@ -3,10 +3,11 @@ import { useState, useEffect, useCallback } from 'react';
 import NavigationMenuDesktop from '../customized/desktop-nav/deskop-nav';
 import NavigationMenuMobile from "../customized/mobile-nav/mobile-nav"
 
-const scrollLogic = (id: string) => {
+const scrollLogic = (id: string, mobile: boolean) => {
 	const targetElement = document.getElementById(id);
+	const offset = mobile ? 20 : 100
 	if (targetElement) {
-		const targetPosition = targetElement.offsetTop - 100;
+		const targetPosition = targetElement.offsetTop - offset;
 		window.scrollTo({
 			top: targetPosition,
 			behavior: 'smooth',
@@ -26,7 +27,7 @@ const NavigationBar = () => {
 			const element = document.getElementById(section.toLowerCase());
 			if (element) {
 				const { offsetTop, offsetHeight } = element;
-
+				console.log({section: section.toLowerCase(), element, scrollPosition, offsetTop, offsetHeight, total: offsetTop + offsetHeight})
 				// Handle the last tracked section (Contact)
 				if (section === 'Contact') {
 					if (scrollPosition >= offsetTop * 0.8) {
@@ -39,18 +40,18 @@ const NavigationBar = () => {
 		});
 	}, []);
 
-	const scrollToID = useCallback(() => {
+	const scrollToID = useCallback((mobile: boolean) => {
 		const hash = window.location.hash;
 		if (hash) {
 			const id = hash.replace('#', '');
-			scrollLogic(id);
+			scrollLogic(id, mobile);
 		}
 	}, []);
 
-	const navOnClick = (event: React.MouseEvent<HTMLElement>) => {
+	const navOnClick = (event: React.MouseEvent<HTMLElement>, mobile: boolean) => {
 		const section = (event.target as HTMLElement).textContent;
 		if (!section) return;
-		scrollLogic(section.toLowerCase());
+		scrollLogic(section.toLowerCase(), mobile);
 
 		if (section.toLowerCase() === baseSections[0].toLowerCase()) {
 			window.history.replaceState(null, '', window.location.pathname);
@@ -61,7 +62,7 @@ const NavigationBar = () => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			scrollToID();
+			scrollToID(true);
 		}, 480);
 
 		window.addEventListener('scroll', setActiveOnScroll);

@@ -11,6 +11,7 @@ body {
 }
 
 @layer base {
+
 	ul,
 	ol,
 	menu {
@@ -34,7 +35,7 @@ body {
 	}
 
 	h2 {
-		@apply text-2xl;
+		@apply text-2xl mb-10;
 	}
 
 	h3 {
@@ -51,6 +52,14 @@ body {
 
 	p {
 		@apply py-2;
+	}
+
+	section {
+		@apply flex flex-col place-content-center min-h-screen mb-16;
+	}
+
+	nav {
+		@apply bg-black/60 backdrop-blur-lg shadow-md;
 	}
 }
 
