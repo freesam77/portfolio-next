@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import FancyMultiSelect, { SelectOption } from "@/components/customized/select/select-12";
 import { Card, CardContent } from '../ui/card';
 
@@ -18,8 +18,15 @@ interface SkillsetProps {
 const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 	const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
 	const [exitingSkills, setExitingSkills] = useState<string[]>([]);
-
+	const gridRef = useRef<HTMLDivElement>(null);
+	const [lockedHeight, setLockedHeight] = useState<number | undefined>(undefined);
 	const skillsetData = skillset;
+
+	useEffect(() => {
+		if (gridRef.current && lockedHeight === undefined) {
+			setLockedHeight(gridRef.current.offsetHeight);
+		}
+	}, [lockedHeight]);
 
 	// Build unique category list, excluding "Softskills"
 	const categories: string[] = useMemo(() => {
@@ -85,27 +92,31 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 				/>
 			</div>
 
-			<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-				{filteredSkills.map((item) => {
-					// @ts-expect-error: src exists on runtime data
-					const src = typeof item.src === 'string' ? item.src : '';
-					const skill = item.skill;
-					return (
-						<Card
-							key={skill}
-							className={`bg-gray-900/60 backdrop-blur transition-all ${exitingSkills.includes(skill) ? 'animate-fade-out' : 'animate-fade-in'}`}
-						>
-							<CardContent className="flex items-center p-0 ">
-								{src && (
-									<div className="p-2 rounded-xl bg-white/80 size-20 flex items-center justify-center">
-										<img src={src} alt={skill} className="max-h-12 max-w-12 object-contain" />
-									</div>
-								)}
-								<p className="ml-4 sm:text-md">{skill}</p>
-							</CardContent>
-						</Card>
-					);
-				})}
+			<div ref={gridRef} style={lockedHeight ? { height: lockedHeight } : undefined}>
+
+				<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
+				>
+					{filteredSkills.map((item) => {
+						// @ts-expect-error: src exists on runtime data
+						const src = typeof item.src === 'string' ? item.src : '';
+						const skill = item.skill;
+						return (
+							<Card
+								key={skill}
+								className={`bg-gray-900/60 backdrop-blur transition-all ${exitingSkills.includes(skill) ? 'animate-fade-out' : 'animate-fade-in'}`}
+							>
+								<CardContent className="flex items-center p-0 ">
+									{src && (
+										<div className="p-2 rounded-xl bg-white/80 size-20 flex items-center justify-center">
+											<img src={src} alt={skill} className="max-h-12 max-w-12 object-contain" />
+										</div>
+									)}
+									<p className="ml-4 sm:text-md">{skill}</p>
+								</CardContent>
+							</Card>
+						);
+					})}
+				</div>
 			</div>
 		</ >
 	);
