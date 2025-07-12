@@ -1,5 +1,5 @@
 'use client';
-import CardPost from '../customized/card/card-post';
+import ProjectCard from '../customized/ProjectCard';
 
 export interface ProjectData {
 	id: string;
@@ -25,7 +25,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects = [] }) => {
 				{sortedProjects.map((project: ProjectData) => {
 					if (project.hidden) return null;
 					return (
-						<CardPost
+						<ProjectCard
 							key={`${project.id}-${project.projectName}`}
 							projectName={project.projectName}
 							description={project.description}

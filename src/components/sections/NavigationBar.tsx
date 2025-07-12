@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import NavigationMenuDesktop from '../customized/desktop-nav/deskop-nav';
-import NavigationMenuMobile from "../customized/mobile-nav/mobile-nav"
+import NavigationMenuDesktop from '../customized/NavigationMenuDesktop';
+import NavigationMenuMobile from "../customized/NavigationMenuMobile"
 
 const scrollLogic = (id: string, mobile: boolean) => {
 	const targetElement = document.getElementById(id);

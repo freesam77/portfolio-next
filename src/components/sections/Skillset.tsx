@@ -1,7 +1,7 @@
 'use client';
 import { useMemo, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import FancyMultiSelect, { SelectOption } from "@/components/customized/select/select-12";
+import MultiSelect, { SelectOption } from "@/components/customized/MultiSelect";
 import { Card, CardContent } from '../ui/card';
 
 interface SkillData {
@@ -85,7 +85,7 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 	return (
 		<>
 			<div className="block mb-4">
-				<FancyMultiSelect
+				<MultiSelect
 					options={categories.map((cat) => ({ value: cat, label: cat }))}
 					value={selectedCategories}
 					onChange={setSelectedCategories}

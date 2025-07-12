@@ -10,11 +10,11 @@ import { Separator } from "@/components/ui/separator";
 import {
 	LinkIcon
 } from "lucide-react";
-import StackBadge from "../badge/badge-02"
+import StackBadge from "./StackBadge"
 import Image from "next/image";
 
 
-export default function CardPost({
+export default function ProjectCard({
 	mediaUrl,
 	projectName,
 	description,

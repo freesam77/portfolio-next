@@ -22,7 +22,7 @@ interface FancyMultiSelectProps {
 	placeholder?: string;
 }
 
-export default function FancyMultiSelect({
+export default function MultiSelect({
 	options,
 	value,
 	onChange,
