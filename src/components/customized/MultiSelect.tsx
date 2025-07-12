@@ -31,24 +31,23 @@ export default function MultiSelect({
 	const [open, setOpen] = React.useState(false);
 	const [inputValue, setInputValue] = React.useState("");
 
-	const selected = value || [];
 
 	const handleUnselect = useCallback((option: SelectOption) => {
-		onChange(selected.filter((s) => s.value !== option.value));
-	}, [onChange, selected]);
+		onChange(value.filter((s) => s.value !== option.value));
+	}, [onChange, value]);
 
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLInputElement>) => {
-			if (e.key === "Backspace" && selected.length > 0 && inputValue === "") {
-				onChange(selected.slice(0, -1));
+			if (e.key === "Backspace" && value.length > 0 && inputValue === "") {
+				onChange(value.slice(0, -1));
 			}
 		},
-		[selected, onChange, inputValue]
+		[value, onChange, inputValue]
 	);
 
 	const filteredOptions = useMemo(
-		() => options.filter((option) => !selected.some((s) => s.value === option.value) && option.label.toLowerCase().includes(inputValue.toLowerCase())),
-		[options, selected, inputValue]
+		() => options.filter((option) => !value.some((s) => s.value === option.value) && option.label.toLowerCase().includes(inputValue.toLowerCase())),
+		[options, value, inputValue]
 	);
 
 	return (
@@ -56,7 +55,7 @@ export default function MultiSelect({
 			<Command className="overflow-visible">
 				<div className="rounded-lg border border-input px-3 py-4 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
 					<div className="flex flex-wrap gap-1">
-						{selected.map((option) => {
+						{value.map((option) => {
 							return (
 								<Badge
 									key={option.value}
@@ -95,7 +94,7 @@ export default function MultiSelect({
 													}}
 													onSelect={() => {
 														setInputValue("");
-														onChange([...selected, option]);
+														onChange([...value, option]);
 													}}
 													className={"cursor-pointer"}
 												>

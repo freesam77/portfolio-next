@@ -2,7 +2,6 @@ import { createClient } from 'redis';
 
 declare global {
 	// Allow global var for hot reload in dev
-	// eslint-disable-next-line no-var
 	var _redisClient: ReturnType<typeof createClient> | undefined;
 }
 
