@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
@@ -60,9 +61,7 @@ const NavigationMenuMobile = ({ navOnClick, activeSection, sections, parentClass
 					<SectionNavItem key={section} section={section} navOnClick={(e) => navOnClick(e, true)} isActive={activeSection === section} />
 				))}
 				{/* Center logo always rendered */}
-				<div className="flex-1 flex flex-col items-center z-20 relative">
-					<img src="/sam_2019_darkmode_blue_gradient.svg" alt="React Logo" width="55" />
-				</div>
+				<Image src="/sam_2019_darkmode_blue_gradient.svg" alt="React Logo" width={50} height={50} />
 				{/* Right sections */}
 				{rightSections.map((section) => (
 					<SectionNavItem key={section} section={section} navOnClick={(e) => navOnClick(e, true)} isActive={activeSection === section} />

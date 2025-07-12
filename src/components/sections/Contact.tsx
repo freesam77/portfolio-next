@@ -1,5 +1,6 @@
 'use client';
 import Tooltip from './Tooltip';
+import Image from 'next/image';
 
 interface ContactData {
 	id: string;
@@ -20,10 +21,11 @@ const Contact: React.FC<ContactProps> = ({ contact = [] }) => {
 					.map(({ OnlinePresence, Links, Icon }) => (
 						<Tooltip description={OnlinePresence} key={`${OnlinePresence}-${Links}`}>
 							<a href={Links} key={OnlinePresence}>
-								<img
+								<Image
 									src={Icon || 'https://placehold.co/600x400?text=No+Preview'}
 									alt={OnlinePresence}
 									width="40"
+									height="40"
 								/>
 							</a>
 						</Tooltip>

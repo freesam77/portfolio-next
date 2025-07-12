@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 type NavigationMenuDesktopProps = {
 	navOnClick: (event: React.MouseEvent<HTMLElement>, mobile: boolean) => void;
@@ -14,7 +15,7 @@ const NavigationMenuDesktop = ({ navOnClick, activeSection, sections, parentClas
 		>
 			<div className="container mx-auto flex justify-between items-center h-full w-[90%] px-2">
 				<div className="flex items-center">
-					<img src="/sam_2019_darkmode_blue_gradient.svg" alt="React Logo" width="37" />
+					<Image src="/sam_2019_darkmode_blue_gradient.svg" alt="React Logo" width={37} height={37} />
 					<h1 className="ml-3 mb-0">Samuel Razali</h1>
 				</div>
 
