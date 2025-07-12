@@ -27,7 +27,6 @@ const NavigationBar = () => {
 			const element = document.getElementById(section.toLowerCase());
 			if (element) {
 				const { offsetTop, offsetHeight } = element;
-				console.log({section: section.toLowerCase(), element, scrollPosition, offsetTop, offsetHeight, total: offsetTop + offsetHeight})
 				// Handle the last tracked section (Contact)
 				if (section === 'Contact') {
 					if (scrollPosition >= offsetTop * 0.8) {

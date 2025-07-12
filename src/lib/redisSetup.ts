@@ -7,7 +7,7 @@ declare global {
 
 if (!global._redisClient) {
 	global._redisClient = createClient({ url: process.env.REDIS_URL });
-	global._redisClient.on('error', (err) => console.log('Redis Client Error', err));
+	global._redisClient.on('error', (err) => console.error('Redis Client Error', err));
 	global._redisClient.connect();
 }
 const client = global._redisClient;
