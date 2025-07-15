@@ -79,6 +79,44 @@ body {
 	.about-section * {
 		@apply my-4;
 	}
+
+	.overflow-scroll-content::-webkit-scrollbar {
+		background: var(--color-muted-foreground);
+		width: 6px;
+	}
+
+
+	.overflow-scroll-content::-webkit-scrollbar-thumb {
+		background: var(--color-muted-foreground);
+		border-radius: 4px;
+	}
+
+
+	.overflow-scroll-content::-webkit-scrollbar-thumb:hover {
+		background: var(--color-muted-foreground);
+	}
+
+
+	.overflow-scroll-content::-webkit-scrollbar-button {
+		display: none;
+		height: 0;
+		width: 0;
+	}
+
+	.overflow-scroll-content::-webkit-scrollbar-button:end {
+		display: none;
+	}
+	.overflow-scroll-content::-webkit-scrollbar-button:start {
+		display: block;
+	}
+
+
+	/* For Firefox */
+
+	.overflow-scroll-content {
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-muted-foreground) transparent;
+	}
 }
 
 @layer utilities {
@@ -236,4 +274,30 @@ body {
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+/* Hide scrollbar arrows for Webkit browsers */
+.overflow-scroll-content::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Optional: Style the scrollbar for subtlety */
+.overflow-scroll-content::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+.overflow-scroll-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+.overflow-scroll-content::-webkit-scrollbar-thumb:hover {
+  background: #a3a3a3;
+}
+
+/* For Firefox */
+.overflow-scroll-content {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
 }

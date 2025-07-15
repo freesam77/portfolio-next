@@ -49,7 +49,7 @@ export default function ProjectCard({
 				<Separator />
 
 
-				<div className="mt-2 text-muted-foreground" dangerouslySetInnerHTML={{
+				<div className="mt-2 pr-2 text-muted-foreground max-h-72 overflow-scroll-content overflow-y-auto" dangerouslySetInnerHTML={{
 					__html: description,
 				}}>
 				</div>
