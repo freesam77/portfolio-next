@@ -55,7 +55,7 @@ body {
 	}
 
 	section {
-		@apply flex flex-col place-content-center min-h-screen mb-16;
+		@apply flex flex-col place-content-start min-h-[max(100vh,600px)] mb-16;
 	}
 
 	nav {
@@ -74,10 +74,6 @@ body {
 
 	.nav-link-active {
 		@apply [text-shadow:_0_0_17px] text-sky-300;
-	}
-
-	.about-section * {
-		@apply my-4;
 	}
 
 	.overflow-scroll-content::-webkit-scrollbar {

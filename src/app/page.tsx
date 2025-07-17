@@ -19,7 +19,7 @@ export default async function Home() {
 			<AnimatedBG />
 			<NavigationBar />
 			<main className="mx-auto w-[80%] max-w-[950px]">
-				<section id="about">
+				<section id="about" className="place-content-center">
 					<About landingPage={data?.landingPage} />
 					<Likes likes={data?.likes} />
 				</section>
