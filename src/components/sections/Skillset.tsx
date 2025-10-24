@@ -124,9 +124,9 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 			</div>
 			<div ref={gridRef} style={lockedHeight ? { height: lockedHeight } : undefined}>
 				{/* Pagination controls */}
-				{totalPages > 1 && (
-					<div className="flex justify-center items-center gap-2 my-4">
-						{Array.from({ length: totalPages }, (_, i) => (
+				<div className="flex justify-center items-center gap-2 my-4 h-[32px]">
+					{totalPages > 1 && (
+						Array.from({ length: totalPages }, (_, i) => (
 							<button
 								key={i + 1}
 								className={`w-8 h-8 flex items-center justify-center rounded-full border text-sm transition-colors cursor-pointer
@@ -135,9 +135,9 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 							>
 								{i + 1}
 							</button>
-						))}
-					</div>
-				)}
+						))
+					)}
+				</div>
 				<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
 					{paginatedSkills.map((item) => {
 						// @ts-expect-error: src exists on runtime data
