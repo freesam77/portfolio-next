@@ -141,7 +141,6 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 				</div>
 				<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
 					{paginatedSkills.map((item) => {
-						// @ts-expect-error: imgsrc exists on runtime data
 						const imgsrc = typeof item.imgsrc === 'string' ? item.imgsrc : '';
 						const skill = item.skill;
 						return (
