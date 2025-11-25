@@ -8,10 +8,12 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
-	LinkIcon
+	LinkIcon,
+	ZoomInIcon
 } from "lucide-react";
 import StackBadge from "./StackBadge"
 import Image from "next/image";
+import ImageModal from "./ImageModal";
 
 
 export default function ProjectCard({
@@ -27,15 +29,24 @@ export default function ProjectCard({
 				<h3>{projectName}</h3>
 			</CardHeader>
 			{imgsrc && (
-				<div className="relative w-full aspect-video bg-muted border-y overflow-hidden">
-					<Image
-						src={imgsrc}
-						alt={projectName}
-						fill
-						className="object-center"
-						priority
-					/>
-				</div>
+				<ImageModal
+					src={imgsrc}
+					alt={projectName}
+					trigger={
+						<div className="relative w-full aspect-video bg-muted border-y overflow-hidden cursor-pointer group">
+							<Image
+								src={imgsrc}
+								alt={projectName}
+								fill
+								className="object-center cursor-pointer transition-transform group-hover:scale-105"
+								priority
+							/>
+							<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+								<ZoomInIcon className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" size={32} />
+							</div>
+						</div>
+					}
+				/>
 			)}
 			<CardContent>
 				{stack.length > 0 && (
