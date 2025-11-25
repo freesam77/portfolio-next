@@ -1,6 +1,6 @@
 'use client';
 import { useMemo, useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
+import OptimizedImage from '@/components/ui/OptimizedImage';
 import MultiSelect, { SelectOption } from "@/components/customized/MultiSelect";
 import { Card, CardContent } from '../ui/card';
 
@@ -151,7 +151,7 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 								<CardContent className="flex items-center p-0 ">
 									{src && (
 										<div className="p-2 rounded-xl bg-white/80 size-20 flex items-center justify-center">
-											<Image src={src} alt={skill} className="max-h-12 max-w-12 object-contain" width={50} height={50} />
+											<OptimizedImage src={src} alt={skill} className="max-h-12 max-w-12 object-contain" width={50} height={50} />
 										</div>
 									)}
 									<p className="ml-4 sm:text-md">{skill}</p>
