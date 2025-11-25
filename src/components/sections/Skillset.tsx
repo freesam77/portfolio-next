@@ -1,6 +1,6 @@
 'use client';
 import { useMemo, useState, useEffect, useRef } from 'react';
-import OptimizedImage from '@/components/ui/OptimizedImage';
+import Image from 'next/image';
 import MultiSelect, { SelectOption } from "@/components/customized/MultiSelect";
 import { Card, CardContent } from '../ui/card';
 
@@ -10,6 +10,7 @@ interface SkillData {
 	skill: string;
 	categories?: string[];
 	hidden?: boolean;
+	imgsrc?: string;
 }
 
 interface SkillsetProps {
@@ -140,8 +141,8 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 				</div>
 				<div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
 					{paginatedSkills.map((item) => {
-						// @ts-expect-error: src exists on runtime data
-						const src = typeof item.src === 'string' ? item.src : '';
+						// @ts-expect-error: imgsrc exists on runtime data
+						const imgsrc = typeof item.imgsrc === 'string' ? item.imgsrc : '';
 						const skill = item.skill;
 						return (
 							<Card
@@ -149,9 +150,9 @@ const Skillset: React.FC<SkillsetProps> = ({ skillset = [] }) => {
 								className={`bg-gray-900/60 backdrop-blur transition-all ${exitingSkills.includes(skill) ? 'animate-fade-out' : 'animate-fade-in'}`}
 							>
 								<CardContent className="flex items-center p-0 ">
-									{src && (
+									{imgsrc && (
 										<div className="p-2 rounded-xl bg-white/80 size-20 flex items-center justify-center">
-											<OptimizedImage src={src} alt={skill} className="max-h-12 max-w-12 object-contain" width={50} height={50} />
+											<Image src={imgsrc} alt={skill} className="max-h-12 max-w-12 object-contain" width={50} height={50} />
 										</div>
 									)}
 									<p className="ml-4 sm:text-md">{skill}</p>

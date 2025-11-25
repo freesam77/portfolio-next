@@ -15,7 +15,7 @@ import Image from "next/image";
 
 
 export default function ProjectCard({
-	mediaUrl,
+	imgsrc,
 	projectName,
 	description,
 	url,
@@ -26,10 +26,10 @@ export default function ProjectCard({
 			<CardHeader>
 				<h3>{projectName}</h3>
 			</CardHeader>
-			{mediaUrl && (
+			{imgsrc && (
 				<div className="relative w-full aspect-video bg-muted border-y overflow-hidden">
 					<Image
-						src={mediaUrl}
+						src={imgsrc}
 						alt={projectName}
 						fill
 						className="object-center"

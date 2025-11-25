@@ -53,8 +53,8 @@ Want to run this locally? Here's what you need:
    NOTION_PROJECTS_DB=your-projects-database-id
    REDIS_URL=redis-db-url
    ```
-3. Run `yarn install`
-4. Start the dev server with `yarn dev`
+3. Run `npm install`
+4. Start the dev server with `npm run dev`
 5. Visit [http://localhost:3000](http://localhost:3000)
 
 Alternatively, you can visit the live site at [samuelrazali.netlify.app](https://samuelrazali.netlify.app/)

@@ -8,7 +8,7 @@ export interface ProjectData {
 	stack: string[];
 	order: number;
 	hidden?: boolean;
-	mediaUrl?: string;
+	imgsrc?: string;
 	url?: string;
 }
 
@@ -29,7 +29,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects = [] }) => {
 							key={`${project.id}-${project.projectName}`}
 							projectName={project.projectName}
 							description={project.description}
-							mediaUrl={project.mediaUrl ?? ''}
+							imgsrc={project.imgsrc ?? ''}
 							url={project.url ?? ''}
 							stack={project.stack}
 							client={''}

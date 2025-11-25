@@ -8,7 +8,7 @@ export interface ProjectData {
 	description: string;
 	stack: string[];
 	url: string;
-	mediaUrl: string;
+	imgsrc: string;
 	hidden: boolean;
 	order: number;
 }
@@ -24,7 +24,7 @@ export interface SkillsetData {
 export interface ContactData {
 	OnlinePresence: string;
 	Links: string;
-	Icon: string;
+	imgsrc: string;
 }
 
 export type NotionDataType = {

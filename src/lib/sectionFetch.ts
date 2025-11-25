@@ -2,7 +2,6 @@
 
 import { Client } from '@notionhq/client';
 import { pageFetch, databaseFetch } from './notionFetch';
-import { preloadSkillsetIcons } from './imageCache';
 
 // Initialize Notion client
 const notionClient = new Client({ auth: process.env.NOTION_API_KEY });
@@ -20,13 +19,7 @@ export const fetchProjects = async () => {
 };
 
 export const fetchSkillset = async () => {
-	const result = await databaseFetch(notionClient, process.env.NOTION_SKILLSET_DB!, 'skillset');
-	// Pre-cache skillset icons to avoid rate limiting
-	if (result.skillset) {
-		const cachedSkillset = await preloadSkillsetIcons(result.skillset);
-		return { skillset: cachedSkillset };
-	}
-	return result;
+	return await databaseFetch(notionClient, process.env.NOTION_SKILLSET_DB!, 'skillset');
 };
 
 export const fetchContact = async () => {
