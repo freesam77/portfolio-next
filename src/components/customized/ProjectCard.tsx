@@ -14,6 +14,7 @@ import {
 import StackBadge from "./StackBadge"
 import Image from "next/image";
 import ImageModal from "./ImageModal";
+import PerfectScrollbar from "@/components/ui/PerfectScrollbar";
 
 
 export default function ProjectCard({
@@ -50,20 +51,24 @@ export default function ProjectCard({
 			)}
 			<CardContent>
 				{stack.length > 0 && (
-					<div className="flex flex-wrap gap-2 w-[100%] mb-4">
-						{stack.map(st => (
-							<StackBadge key={st}>{st}</StackBadge>
-						))}
-					</div>
+					<PerfectScrollbar className="pb-4">
+						<div className="flex gap-2 w-full">
+							{stack.map(st => (
+								<StackBadge key={st}>{st}</StackBadge>
+							))}
+						</div>
+					</PerfectScrollbar>
 				)}
 
 				<Separator />
 
 
-				<div className="mt-2 pr-2 text-muted-foreground max-h-72 overflow-scroll-content overflow-y-auto" dangerouslySetInnerHTML={{
-					__html: description,
-				}}>
-				</div>
+				<PerfectScrollbar className="mt-2 pr-2 text-muted-foreground max-h-72">
+					<div dangerouslySetInnerHTML={{
+						__html: description,
+					}}>
+					</div>
+				</PerfectScrollbar>
 
 			</CardContent>
 

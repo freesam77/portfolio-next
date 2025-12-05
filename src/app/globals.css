@@ -272,28 +272,50 @@ body {
 	}
 }
 
-/* Hide scrollbar arrows for Webkit browsers */
-.overflow-scroll-content::-webkit-scrollbar-button {
-  display: none;
-  width: 0;
-  height: 0;
+/* Perfect Scrollbar Custom Styles */
+.ps__rail-x,
+.ps__rail-y {
+  opacity: 0.6;
+  transition: none !important;
 }
 
-/* Optional: Style the scrollbar for subtlety */
-.overflow-scroll-content::-webkit-scrollbar {
-  width: 6px;
-  background: transparent;
+.ps__rail-x:hover,
+.ps__rail-y:hover,
+.ps__rail-x:focus,
+.ps__rail-y:focus {
+  opacity: 0.6 !important;
+  background-color: transparent !important;
+  
 }
-.overflow-scroll-content::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+
+.ps__thumb-x,
+.ps__thumb-y {
+  background-color: var(--color-muted-foreground) !important;
   border-radius: 4px;
-}
-.overflow-scroll-content::-webkit-scrollbar-thumb:hover {
-  background: #a3a3a3;
+  opacity: 0.6;
 }
 
-/* For Firefox */
-.overflow-scroll-content {
-  scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
+.ps__thumb-x {
+    height: 4px !important;
+}
+.ps__thumb-y {
+    width: 4px !important;
+}
+
+.ps__thumb-x:hover,
+.ps__thumb-y:hover,
+.ps__thumb-x:focus,
+.ps__thumb-y:focus {
+  background-color: var(--color-muted-foreground) !important;
+  opacity: 0.6 !important;
+}
+
+.ps__rail-x,
+.ps__rail-y {
+  background-color: transparent !important;
+}
+
+.ps__rail-x:hover,
+.ps__rail-y:hover {
+  background-color: transparent !important;
 }
