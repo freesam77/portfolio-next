@@ -38,7 +38,7 @@ export const databaseFetch = async (
 			if (!isPageObjectResponse(objectResponse)) {
 				throw new Error('Response type is not page object');
 			}
-			const processedData = notionPropertyProcessor(objectResponse.properties);
+			const processedData = await notionPropertyProcessor(objectResponse.properties);
 			if (pageContentAsDescription) {
 				const description = await notionPageToHTML(notionClient, objectResponse.id);
 				processedData.description = description;

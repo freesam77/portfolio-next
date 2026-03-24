@@ -53,9 +53,9 @@ const propertyValueProcessor = (
 	}
 };
 
-const notionPropertyProcessor = (
+const notionPropertyProcessor = async (
 	databaseProperties: PageObjectResponse['properties'],
-): ProcessedData => {
+): Promise<ProcessedData> => {
 	const data: ProcessedData = {};
 
 	for (const [key, value] of Object.entries(databaseProperties)) {
