@@ -7,7 +7,7 @@ Welcome to my portfolio! This is where I showcase my work, skills, and projects.
 - **Dynamic Content with Notion**: All my content is managed through Notion databases, making updates a breeze
 - **Smooth Experience**: Each section loads independently with its own loading state
 - **Pixel Perfect**: A beautiful, responsive design that works everywhere
-- **Lightning Fast**: Redis-powered caching for snappy content delivery
+- **Lightning Fast**: CDN-cached delivery for snappy content delivery
 - **Modern Animations**: Smooth transitions and interactive elements
 
 ## 🛠️ Tech Stack
@@ -28,7 +28,6 @@ Welcome to my portfolio! This is where I showcase my work, skills, and projects.
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | Serverless API endpoints with Next.js       |
 | [Notion API](https://developers.notion.com/)                                                       | Content management and database integration |
-| [Redis](https://redis.io/)                                                                         | In-memory data structure store for caching  |
 | [Netlify](https://www.netlify.com/)                                                                | Cloud platform for static site deployment   |
 
 ### Development
@@ -51,7 +50,6 @@ Want to run this locally? Here's what you need:
    NOTION_SKILLSET_DB=your-skillset-database-id
    NOTION_LANDING_PAGE_DB=your-database-id
    NOTION_PROJECTS_DB=your-projects-database-id
-   REDIS_URL=redis-db-url
    ```
 3. Run `npm install`
 4. Start the dev server with `npm run dev`

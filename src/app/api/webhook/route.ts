@@ -1,4 +1,3 @@
-import client from '@/lib/redisSetup';
 import { revalidatePath } from 'next/cache';
 import {
 	fetchLandingPage,
@@ -37,16 +36,12 @@ export async function POST(req: Request) {
 			return Response.json({ error: 'Invalid workspace ID' }, { status: 403 });
 		}
 
-		// Always update all sections on every webhook
+		// Warm Notion requests so the next render has fresh data
 		const allSections = Object.keys(sectionHandlers);
 		for (const section of allSections) {
 			const handler = sectionHandlers[section as keyof typeof sectionHandlers];
-			const result = await handler();
-			await client.set(`portfolioData_${section}`, JSON.stringify(result));
+			await handler();
 		}
-
-		// Clear the main portfolio data cache to force fresh data on next request
-		await client.del('portfolioData');
 
 		// Trigger ISR revalidation for the home page
 		revalidatePath('/');
