@@ -23,9 +23,10 @@ export default function ProjectCard({ imgsrc, projectName, description, url, sta
 							<Image
 								src={imgsrc}
 								alt={projectName}
-								className="object-center cursor-pointer transition-transform group-hover:scale-105"
+								fill
+								className="object-cover object-top cursor-pointer transition-transform group-hover:scale-105"
 								priority
-      />
+							/>
 							<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
 								<ZoomInIcon
 									className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"

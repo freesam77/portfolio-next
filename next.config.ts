@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
 			},
 			{
 				protocol: 'https',
+				hostname: 'tanstack.com',
+			},
+			{
+				protocol: 'https',
 				hostname: 'placehold.co',
 			},
 			{
@@ -25,6 +29,10 @@ const nextConfig: NextConfig = {
 			{
 				protocol: 'https',
 				hostname: 'cdn2.iconfinder.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'avatars.githubusercontent.com',
 			},
 			{
 				protocol: 'https',

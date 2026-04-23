@@ -40,12 +40,13 @@ export default function ImageModal({ src, alt, trigger }: ImageModalProps) {
               </button>
             </DialogClose>
           </div>
-          <div>
+          <div className="relative w-[min(90vw,1200px)] h-[min(85vh,800px)]">
             <Image
               src={src}
               alt={alt}
-              width={1200}
-              height={800}
+              fill
+              sizes="(max-width: 1200px) 90vw, 1200px"
+              className="object-cover object-center"
               quality={95}
               priority
             />
